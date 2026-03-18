@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="100" cy="102" rx="32" ry="50" stroke-width="2"/>
+    <path d="M72 78 L128 126 M72 92 L128 112 M72 106 L128 98 M72 120 L128 84" stroke-width="0.8"/>
+    <path d="M68 102 L132 102 M70 88 L130 116 M70 116 L130 88" stroke-width="0.8"/>
+    <path d="M92 52 L86 28 M96 50 L92 22 M100 48 L100 18 M104 50 L108 22 M108 52 L114 28" stroke-width="1.5"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Pineapple</text>
+</svg>

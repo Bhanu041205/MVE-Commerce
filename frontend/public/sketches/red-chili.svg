@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M100 35 Q80 45 72 70 Q65 100 70 130 Q75 155 90 160 Q100 162 102 145 Q105 115 100 85 Q98 60 100 35" stroke-width="2"/>
+    <path d="M100 35 Q110 32 115 38 Q118 45 112 48" stroke-width="1.5"/>
+    <path d="M75 80 Q88 75 100 78" stroke-width="0.8"/>
+    <path d="M72 110 Q85 105 100 108" stroke-width="0.8"/>
+    <path d="M75 140 Q85 135 95 138" stroke-width="0.8"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Red Chili</text>
+</svg>

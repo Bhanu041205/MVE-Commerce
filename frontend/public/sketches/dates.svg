@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="65" cy="72" rx="10" ry="22" stroke-width="2" transform="rotate(-10 65 72)"/>
+    <path d="M58 58 Q65 52 72 58" stroke-width="1"/>
+    <ellipse cx="100" cy="68" rx="10" ry="22" stroke-width="2" transform="rotate(5 100 68)"/>
+    <path d="M93 52 Q100 46 107 52" stroke-width="1"/>
+    <ellipse cx="135" cy="74" rx="10" ry="22" stroke-width="2" transform="rotate(-5 135 74)"/>
+    <path d="M128 58 Q135 52 142 58" stroke-width="1"/>
+    <ellipse cx="80" cy="125" rx="10" ry="22" stroke-width="2" transform="rotate(8 80 125)"/>
+    <path d="M73 109 Q80 103 87 109" stroke-width="1"/>
+    <ellipse cx="118" cy="122" rx="10" ry="22" stroke-width="2" transform="rotate(-8 118 122)"/>
+    <path d="M111 106 Q118 100 125 106" stroke-width="1"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Dates</text>
+</svg>

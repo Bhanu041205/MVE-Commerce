@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M55 85 Q55 138 100 142 Q145 138 145 85" stroke-width="2"/>
+    <path d="M50 85 L150 85" stroke-width="2.5"/>
+    <path d="M70 150 Q100 160 130 150" stroke-width="1.5"/>
+    <path d="M82 72 Q80 58 84 48" stroke-width="1.2"/>
+    <path d="M100 68 Q98 52 102 40" stroke-width="1.2"/>
+    <path d="M118 72 Q116 58 120 48" stroke-width="1.2"/>
+    <circle cx="72" cy="80" r="7" stroke-width="1.2"/>
+    <path d="M65 80 L79 80" stroke-width="0.8"/>
+    <circle cx="90" cy="82" r="7" stroke-width="1.2"/>
+    <path d="M83 82 L97 82" stroke-width="0.8"/>
+    <circle cx="108" cy="80" r="7" stroke-width="1.2"/>
+    <path d="M101 80 L115 80" stroke-width="0.8"/>
+    <circle cx="126" cy="82" r="7" stroke-width="1.2"/>
+    <path d="M119 82 L133 82" stroke-width="0.8"/>
+    <circle cx="82" cy="94" r="6" stroke-width="1.2"/>
+    <circle cx="100" cy="96" r="6" stroke-width="1.2"/>
+    <circle cx="118" cy="94" r="6" stroke-width="1.2"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Chana Dal</text>
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M50 115 Q50 55 100 50 Q150 55 150 115 Z" stroke-width="2"/>
+    <path d="M50 115 L150 115" stroke-width="2.5"/>
+    <path d="M56 108 Q56 62 100 58 Q144 62 144 108" stroke-width="1" stroke-dasharray="3 4"/>
+    <ellipse cx="80" cy="82" rx="4" ry="6" fill="#4a3728" transform="rotate(-15 80 82)"/>
+    <ellipse cx="100" cy="78" rx="4" ry="6" fill="#4a3728"/>
+    <ellipse cx="120" cy="82" rx="4" ry="6" fill="#4a3728" transform="rotate(15 120 82)"/>
+    <ellipse cx="88" cy="100" rx="4" ry="6" fill="#4a3728" transform="rotate(-10 88 100)"/>
+    <ellipse cx="112" cy="100" rx="4" ry="6" fill="#4a3728" transform="rotate(10 112 100)"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Watermelon Seeds</text>
+</svg>

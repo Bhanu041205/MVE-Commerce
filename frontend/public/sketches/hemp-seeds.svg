@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M100 35 L100 55" stroke-width="2"/>
+    <path d="M100 55 L80 85 M100 55 L120 85 M100 55 L65 72 M100 55 L135 72 M100 55 L100 90" stroke-width="1.5"/>
+    <path d="M80 85 Q68 82 65 72" stroke-width="1.2"/>
+    <path d="M120 85 Q132 82 135 72" stroke-width="1.2"/>
+    <circle cx="70" cy="115" r="4" stroke-width="1.2"/>
+    <circle cx="88" cy="120" r="4" stroke-width="1.2"/>
+    <circle cx="105" cy="116" r="4" stroke-width="1.2"/>
+    <circle cx="122" cy="122" r="4" stroke-width="1.2"/>
+    <circle cx="80" cy="138" r="4" stroke-width="1.2"/>
+    <circle cx="98" cy="140" r="4" stroke-width="1.2"/>
+    <circle cx="115" cy="136" r="4" stroke-width="1.2"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Hemp Seeds</text>
+</svg>

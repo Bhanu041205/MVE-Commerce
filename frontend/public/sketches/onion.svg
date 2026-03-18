@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M100 40 Q60 65 58 100 Q55 140 100 150 Q145 140 142 100 Q140 65 100 40" stroke-width="2"/>
+    <path d="M100 40 Q80 65 78 100 Q76 135 100 150" stroke-width="1"/>
+    <path d="M100 40 Q120 65 122 100 Q124 135 100 150" stroke-width="1"/>
+    <path d="M100 40 L100 25" stroke-width="2"/>
+    <path d="M95 28 Q100 20 105 28" stroke-width="1.2"/>
+    <path d="M75 155 Q90 160 80 168 M100 152 L100 165 M125 155 Q110 160 120 168" stroke-width="1.2"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Onion</text>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M75 50 L65 138 Q100 152 135 138 L125 50 Q100 40 75 50Z" stroke-width="2"/>
+    <path d="M75 50 Q100 60 125 50" stroke-width="1.5"/>
+    <ellipse cx="142" cy="142" rx="5" ry="3" stroke-width="1.2" transform="rotate(-20 142 142)"/>
+    <ellipse cx="152" cy="136" rx="5" ry="3" stroke-width="1.2" transform="rotate(10 152 136)"/>
+    <ellipse cx="148" cy="150" rx="4" ry="2.5" stroke-width="1.2"/>
+    <ellipse cx="158" cy="148" rx="5" ry="3" stroke-width="1.2" transform="rotate(-30 158 148)"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Seeds</text>
+</svg>

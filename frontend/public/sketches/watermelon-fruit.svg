@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M50 112 Q50 52 100 48 Q150 52 150 112 Z" stroke-width="2"/>
+    <path d="M50 112 L150 112" stroke-width="2.5"/>
+    <path d="M56 106 Q56 60 100 56 Q144 60 144 106" stroke-width="1" stroke-dasharray="3 4"/>
+    <circle cx="80" cy="80" r="3" fill="#4a3728"/>
+    <circle cx="100" cy="75" r="3" fill="#4a3728"/>
+    <circle cx="120" cy="80" r="3" fill="#4a3728"/>
+    <circle cx="88" cy="96" r="3" fill="#4a3728"/>
+    <circle cx="112" cy="96" r="3" fill="#4a3728"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Watermelon</text>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="100" cy="92" rx="48" ry="35" stroke-width="2"/>
+    <path d="M75 80 Q78 78 80 80" stroke-width="1.5"/>
+    <path d="M110 78 Q113 76 115 78" stroke-width="1.5"/>
+    <path d="M90 100 Q93 98 95 100" stroke-width="1.5"/>
+    <path d="M125 90 Q128 88 130 90" stroke-width="1.5"/>
+    <path d="M68 92 Q71 90 73 92" stroke-width="1.5"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Potato</text>
+</svg>

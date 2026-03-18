@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M45 108 Q45 152 100 157 Q155 152 155 108" stroke-width="2"/>
+    <path d="M40 108 L160 108" stroke-width="2"/>
+    <path d="M55 122 L145 122 M60 136 L140 136" stroke-width="0.8"/>
+    <path d="M62 98 L52 62 L72 98" stroke-width="1.5"/>
+    <path d="M57 62 Q62 48 67 62" stroke-width="1.2"/>
+    <circle cx="100" cy="85" r="18" stroke-width="1.5"/>
+    <path d="M92 68 L100 72 L108 68" stroke-width="1.2"/>
+    <circle cx="138" cy="80" r="10" stroke-width="1.5"/>
+    <circle cx="130" cy="72" r="8" stroke-width="1.5"/>
+    <circle cx="146" cy="72" r="8" stroke-width="1.5"/>
+    <path d="M138 90 L138 102" stroke-width="1.5"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Fresh Vegetables</text>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="62" y="55" width="76" height="95" rx="38" stroke-width="2"/>
+    <path d="M100 55 L100 48 Q102 42 106 45" stroke-width="1.5"/>
+    <circle cx="82" cy="78" r="2" fill="#4a3728" opacity="0.3"/>
+    <circle cx="100" cy="75" r="2" fill="#4a3728" opacity="0.3"/>
+    <circle cx="118" cy="80" r="2" fill="#4a3728" opacity="0.3"/>
+    <circle cx="88" cy="98" r="2" fill="#4a3728" opacity="0.3"/>
+    <circle cx="112" cy="102" r="2" fill="#4a3728" opacity="0.3"/>
+    <circle cx="78" cy="118" r="2" fill="#4a3728" opacity="0.3"/>
+    <circle cx="100" cy="120" r="2" fill="#4a3728" opacity="0.3"/>
+    <circle cx="120" cy="122" r="2" fill="#4a3728" opacity="0.3"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Cucumber</text>
+</svg>

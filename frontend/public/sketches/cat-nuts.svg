@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="70" cy="95" rx="18" ry="10" stroke-width="1.5" transform="rotate(-15 70 95)"/>
+    <path d="M110 70 Q128 75 124 92 Q120 105 108 100 Q98 92 102 80 Q106 70 110 70" stroke-width="1.5"/>
+    <circle cx="95" cy="120" r="15" stroke-width="1.5"/>
+    <path d="M85 112 Q95 125 105 112" stroke-width="1"/>
+    <path d="M85 128 Q95 115 105 128" stroke-width="1"/>
+    <ellipse cx="130" cy="115" rx="12" ry="8" stroke-width="1.5"/>
+    <path d="M130 107 L130 123" stroke-width="1"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Nuts & Dry Fruits</text>
+</svg>

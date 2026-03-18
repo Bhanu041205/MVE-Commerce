@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="82" y="30" width="36" height="65" rx="6" stroke-width="2"/>
+    <path d="M82 50 L118 50" stroke-width="1.5"/>
+    <circle cx="96" cy="40" r="3" fill="#4a3728"/>
+    <circle cx="104" cy="40" r="3" fill="#4a3728"/>
+    <path d="M94 30 L94 24 Q100 18 106 24 L106 30" stroke-width="1.5"/>
+    <circle cx="72" cy="115" r="5" fill="#4a3728" opacity="0.5"/>
+    <circle cx="88" cy="120" r="5" fill="#4a3728" opacity="0.5"/>
+    <circle cx="105" cy="118" r="5" fill="#4a3728" opacity="0.5"/>
+    <circle cx="122" cy="122" r="5" fill="#4a3728" opacity="0.5"/>
+    <circle cx="80" cy="135" r="5" fill="#4a3728" opacity="0.5"/>
+    <circle cx="98" cy="138" r="5" fill="#4a3728" opacity="0.5"/>
+    <circle cx="115" cy="135" r="5" fill="#4a3728" opacity="0.5"/>
+    <circle cx="130" cy="115" r="5" fill="#4a3728" opacity="0.5"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Black Pepper</text>
+</svg>

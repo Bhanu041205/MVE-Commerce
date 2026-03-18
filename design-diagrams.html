@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVE Commerce - Design Diagrams</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; color: #333; }
+        .header { background: linear-gradient(135deg, #1a73e8, #0d47a1); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 2em; margin-bottom: 5px; }
+        .header p { opacity: 0.9; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .diagram-card {
+            background: white; border-radius: 12px; margin: 25px 0; padding: 25px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08); page-break-inside: avoid;
+        }
+        .diagram-card h2 {
+            font-size: 1.3em; color: #1a73e8; margin-bottom: 5px;
+            border-bottom: 2px solid #e8eaed; padding-bottom: 10px;
+        }
+        .diagram-card .subtitle { color: #666; font-size: 0.9em; margin-bottom: 15px; }
+        .mermaid { display: flex; justify-content: center; overflow-x: auto; }
+        .mermaid svg { min-width: fit-content; }
+        .save-btn {
+            display: inline-block; margin-top: 12px; padding: 8px 20px;
+            background: #1a73e8; color: white; border: none; border-radius: 6px;
+            cursor: pointer; font-size: 0.9em;
+        }
+        .save-btn:hover { background: #1557b0; }
+        .instructions {
+            background: #e8f0fe; border-left: 4px solid #1a73e8; padding: 15px 20px;
+            border-radius: 0 8px 8px 0; margin: 20px 0;
+        }
+        .instructions strong { color: #1a73e8; }
+        @media print {
+            .save-btn, .instructions, .header { display: none; }
+            .diagram-card { box-shadow: none; border: 1px solid #ddd; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>MVE Commerce - Project Design Assets</h1>
+    <p>Full-Stack E-Commerce Platform | Spring Boot + React 18 + MySQL</p>
+</div>
+
+<div class="container">
+
+    <div class="instructions">
+        <strong>How to Save Diagrams:</strong><br>
+        Click the <b>"Save as PNG"</b> button below each diagram to download it. 
+        Or use <b>Ctrl+P</b> &rarr; "Save as PDF" to save all as one document.
+    </div>
+
+    <!-- 1. ER DIAGRAM -->
+    <div class="diagram-card">
+        <h2>1. ER Diagram (Entity Relationship)</h2>
+        <p class="subtitle">Database schema with 7 tables, primary keys, foreign keys, and relationships</p>
+        <div class="mermaid" id="diagram1">
+erDiagram
+    USERS ||--o{ ADDRESSES : "has"
+    USERS ||--o{ ORDERS : "places"
+    USERS ||--o{ CART_ITEMS : "owns"
+    CATEGORIES ||--o{ PRODUCTS : "contains"
+    ORDERS ||--o{ ORDER_ITEMS : "has"
+    PRODUCTS ||--o{ ORDER_ITEMS : "in"
+    PRODUCTS ||--o{ CART_ITEMS : "added"
+    ADDRESSES ||--o{ ORDERS : "ships"
+
+    USERS {
+        bigint id PK
+        varchar email UK
+        varchar password
+        varchar first_name
+        varchar last_name
+        varchar phone
+        varchar role
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    CATEGORIES {
+        bigint id PK
+        varchar name
+        text description
+        varchar image_url
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    PRODUCTS {
+        bigint id PK
+        varchar name
+        text description
+        decimal price
+        int stock
+        varchar image_url
+        text images
+        decimal discount
+        bigint category_id FK
+        boolean is_active
+        decimal rating
+        int review_count
+        timestamp created_at
+    }
+
+    ADDRESSES {
+        bigint id PK
+        bigint user_id FK
+        varchar full_name
+        varchar phone
+        varchar street
+        varchar city
+        varchar state
+        varchar postal_code
+        varchar country
+        boolean is_default
+        boolean is_active
+    }
+
+    ORDERS {
+        bigint id PK
+        varchar order_number UK
+        bigint user_id FK
+        decimal total_amount
+        int total_items
+        varchar status
+        bigint address_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    ORDER_ITEMS {
+        bigint id PK
+        bigint order_id FK
+        bigint product_id FK
+        varchar product_name
+        int quantity
+        decimal price
+        timestamp created_at
+    }
+
+    CART_ITEMS {
+        bigint id PK
+        bigint user_id FK
+        bigint product_id FK
+        int quantity
+        timestamp created_at
+        timestamp updated_at
+    }
+        </div>
+        <button class="save-btn" onclick="saveDiagram('diagram1', '1_ER_Diagram')">Save as PNG</button>
+    </div>
+
+    <!-- 2. SYSTEM ARCHITECTURE -->
+    <div class="diagram-card">
+        <h2>2. System Architecture Diagram</h2>
+        <p class="subtitle">4-tier layered architecture: Client → API Gateway → Service → Database</p>
+        <div class="mermaid" id="diagram2">
+graph TB
+    subgraph FE["CLIENT LAYER - React 18 + Redux + Tailwind CSS"]
+        PUB["Public Pages: Login, Register, Forgot Password"]
+        CUST["Customer Portal: Home, Products, Cart, Checkout, Orders, Profile"]
+        ADM["Admin Portal: Dashboard, Products, Categories, Orders"]
+        COMP["Shared Components: Navbar, Footer, Spinner"]
+        STORE["State: Redux Store - Auth Slice + Cart Slice"]
+    end
+
+    subgraph API["API LAYER - Spring Boot REST API Port 6969"]
+        CTRL["Controllers: Auth, Product, Category, Cart, Order, Address"]
+        SEC["Security: JWT Provider + JWT Auth Filter + CORS + BCrypt"]
+    end
+
+    subgraph SVC["SERVICE LAYER - Business Logic"]
+        SVCS["AuthService | ProductService | CategoryService | CartService | OrderService | AddressService"]
+    end
+
+    subgraph REPO["REPOSITORY LAYER - Spring Data JPA"]
+        REPOS["UserRepo | ProductRepo | CategoryRepo | CartItemRepo | OrderRepo | OrderItemRepo | AddressRepo"]
+    end
+
+    subgraph DB["DATABASE LAYER - MySQL 8.0"]
+        TABLES["Tables: users, categories, products, addresses, orders, order_items, cart_items"]
+        IDX["Indexes: idx_products_category, idx_orders_user, idx_orders_status, idx_addresses_user, idx_cart_items_user"]
+    end
+
+    FE -->|"HTTP/REST + JWT Bearer Token"| API
+    API --> SVC
+    SVC --> REPO
+    REPO -->|"Hibernate / JPA"| DB
+        </div>
+        <button class="save-btn" onclick="saveDiagram('diagram2', '2_System_Architecture')">Save as PNG</button>
+    </div>
+
+    <!-- 3. USE CASE DIAGRAM -->
+    <div class="diagram-card">
+        <h2>3. Use Case Diagram</h2>
+        <p class="subtitle">3 actors (Guest, Customer, Admin) with 27 use cases across all modules</p>
+        <div class="mermaid" id="diagram3">
+graph LR
+    G["fa:fa-user Guest"]
+    C["fa:fa-shopping-cart Customer"]
+    A["fa:fa-user-shield Admin"]
+
+    G --- UC1["Register Account"]
+    G --- UC2["Login Email/Password"]
+    G --- UC3["Google OAuth Login"]
+    G --- UC4["Forgot Password + OTP"]
+    G --- UC5["Browse Products"]
+    G --- UC6["Search Products"]
+    G --- UC7["Filter by Category"]
+    G --- UC8["View Product Detail"]
+
+    C --- UC9["Add to Cart"]
+    C --- UC10["Update Cart Quantity"]
+    C --- UC11["Remove from Cart"]
+    C --- UC12["Clear Entire Cart"]
+    C --- UC13["Checkout / Place Order"]
+    C --- UC14["View My Orders"]
+    C --- UC15["View Order Detail"]
+    C --- UC16["Cancel Order"]
+    C --- UC17["Track Order Status"]
+    C --- UC18["View Profile"]
+    C --- UC19["Manage Addresses"]
+    C --- UC20["Set Default Address"]
+
+    A --- UC21["View Dashboard Analytics"]
+    A --- UC22["Create/Edit/Delete Products"]
+    A --- UC23["Create/Edit/Delete Categories"]
+    A --- UC24["View All Orders"]
+    A --- UC25["Update Order Status"]
+    A --- UC26["View Low Stock Alerts"]
+    A --- UC27["Toggle Product/Category Active"]
+        </div>
+        <button class="save-btn" onclick="saveDiagram('diagram3', '3_Use_Case_Diagram')">Save as PNG</button>
+    </div>
+
+    <!-- 4. AUTH SEQUENCE DIAGRAM -->
+    <div class="diagram-card">
+        <h2>4. Authentication Sequence Diagram</h2>
+        <p class="subtitle">User Registration and Login flow with JWT token generation</p>
+        <div class="mermaid" id="diagram4">
+sequenceDiagram
+    actor U as User Browser
+    participant R as React Frontend
+    participant A as AuthController
+    participant S as AuthService
+    participant DB as MySQL Database
+    participant J as JWT Provider
+
+    rect rgb(232, 245, 233)
+    Note over U,J: USER REGISTRATION FLOW
+    U->>R: Fill registration form
+    R->>A: POST /auth/register
+    A->>S: registerUser(dto)
+    S->>DB: Check if email exists
+    DB-->>S: Email not found - OK
+    S->>S: Encrypt password with BCrypt
+    S->>DB: Save new User with role CUSTOMER
+    DB-->>S: User saved successfully
+    S-->>A: Return success message
+    A-->>R: 200 OK Registration successful
+    R-->>U: Redirect to Login page
+    end
+
+    rect rgb(227, 242, 253)
+    Note over U,J: USER LOGIN FLOW WITH JWT
+    U->>R: Enter email and password
+    R->>A: POST /auth/login
+    A->>S: loginUser(dto)
+    S->>DB: Find user by email
+    DB-->>S: User record found
+    S->>S: Verify password with BCrypt
+    S->>J: Generate JWT token with HS256
+    J-->>S: Signed JWT token returned
+    S-->>A: Return token + UserDTO
+    A-->>R: 200 OK with token and user info
+    R->>R: Store token in Redux and localStorage
+    R-->>U: Redirect to Home or Admin Dashboard
+    end
+
+    rect rgb(255, 243, 224)
+    Note over U,J: AUTHENTICATED API REQUEST
+    U->>R: Navigate to My Orders
+    R->>A: GET /orders with Authorization Bearer JWT
+    A->>J: Validate token signature
+    J-->>A: Token is valid
+    A->>DB: Load user details for RBAC
+    DB-->>A: User details loaded
+    A-->>R: 200 OK with orders list
+    R-->>U: Display orders on screen
+    end
+        </div>
+        <button class="save-btn" onclick="saveDiagram('diagram4', '4_Auth_Sequence_Diagram')">Save as PNG</button>
+    </div>
+
+    <!-- 5. SHOPPING & ORDER SEQUENCE DIAGRAM -->
+    <div class="diagram-card">
+        <h2>5. Shopping & Order Flow Sequence Diagram</h2>
+        <p class="subtitle">Add to Cart and Place Order complete flow</p>
+        <div class="mermaid" id="diagram5">
+sequenceDiagram
+    actor U as Customer
+    participant R as React App
+    participant CC as CartController
+    participant CS as CartService
+    participant OC as OrderController
+    participant OS as OrderService
+    participant DB as MySQL Database
+
+    rect rgb(232, 245, 233)
+    Note over U,DB: ADD TO CART FLOW
+    U->>R: Click Add to Cart on product
+    R->>CC: POST /cart with productId and quantity
+    CC->>CS: addToCart userId productId qty
+    CS->>DB: Check product exists and in stock
+    DB-->>CS: Product available
+    CS->>DB: Check if already in cart
+    DB-->>CS: Not in cart yet
+    CS->>DB: INSERT new cart_item record
+    DB-->>CS: Cart item saved
+    CS-->>CC: Return CartItemDTO
+    CC-->>R: 200 OK
+    R->>R: Update Redux cart state
+    R-->>U: Show Added to cart toast notification
+    end
+
+    rect rgb(227, 242, 253)
+    Note over U,DB: CHECKOUT AND PLACE ORDER FLOW
+    U->>R: Click Place Order button
+    R->>OC: POST /orders with addressId
+    OC->>OS: createOrder userId addressId
+    OS->>DB: Fetch all cart items for user
+    DB-->>OS: Return cart items list
+    OS->>DB: Validate all products have stock
+    DB-->>OS: All products available
+    OS->>DB: Fetch delivery address
+    DB-->>OS: Address found
+    OS->>OS: Calculate total amount
+    OS->>OS: Generate unique order number
+    OS->>DB: INSERT order with status PENDING
+    DB-->>OS: Order record saved
+    OS->>DB: INSERT order_items for each cart item
+    DB-->>OS: Order items saved
+    OS->>DB: UPDATE product stock decrement qty
+    DB-->>OS: Stock updated
+    OS->>DB: DELETE all cart items clear cart
+    DB-->>OS: Cart cleared
+    OS-->>OC: Return OrderDTO
+    OC-->>R: 201 Created with order details
+    R->>R: Clear Redux cart state
+    R-->>U: Show order confirmation page
+    end
+        </div>
+        <button class="save-btn" onclick="saveDiagram('diagram5', '5_Shopping_Order_Sequence')">Save as PNG</button>
+    </div>
+
+    <!-- 6. CLASS DIAGRAM -->
+    <div class="diagram-card">
+        <h2>6. Class Diagram (Domain Model)</h2>
+        <p class="subtitle">7 entity classes with attributes, 2 enumerations, and relationships</p>
+        <div class="mermaid" id="diagram6">
+classDiagram
+    class User {
+        -Long id
+        -String email
+        -String password
+        -String firstName
+        -String lastName
+        -String phone
+        -Role role
+        -Boolean isActive
+        -LocalDateTime createdAt
+        -LocalDateTime updatedAt
+    }
+
+    class Category {
+        -Long id
+        -String name
+        -String description
+        -String imageUrl
+        -Boolean isActive
+        -LocalDateTime createdAt
+    }
+
+    class Product {
+        -Long id
+        -String name
+        -String description
+        -BigDecimal price
+        -Integer stock
+        -String imageUrl
+        -String images
+        -BigDecimal discount
+        -Boolean isActive
+        -BigDecimal rating
+        -Integer reviewCount
+    }
+
+    class Address {
+        -Long id
+        -String fullName
+        -String phone
+        -String street
+        -String city
+        -String state
+        -String postalCode
+        -String country
+        -Boolean isDefault
+    }
+
+    class Order {
+        -Long id
+        -String orderNumber
+        -BigDecimal totalAmount
+        -Integer totalItems
+        -OrderStatus status
+        -LocalDateTime createdAt
+    }
+
+    class OrderItem {
+        -Long id
+        -String productName
+        -Integer quantity
+        -BigDecimal price
+    }
+
+    class CartItem {
+        -Long id
+        -Integer quantity
+        -LocalDateTime createdAt
+    }
+
+    class Role {
+        ADMIN
+        CUSTOMER
+    }
+
+    class OrderStatus {
+        PENDING
+        CONFIRMED
+        PROCESSING
+        SHIPPED
+        DELIVERED
+        CANCELLED
+    }
+
+    User "1" --> "*" Address : has
+    User "1" --> "*" Order : places
+    User "1" --> "*" CartItem : owns
+    User --> Role : has role
+    Category "1" --> "*" Product : contains
+    Product "1" --> "*" CartItem : added to
+    Product "1" --> "*" OrderItem : ordered as
+    Order "1" --> "*" OrderItem : contains
+    Order "1" --> "1" Address : ships to
+    Order --> OrderStatus : has status
+        </div>
+        <button class="save-btn" onclick="saveDiagram('diagram6', '6_Class_Diagram')">Save as PNG</button>
+    </div>
+
+    <!-- 7. DFD LEVEL 0 -->
+    <div class="diagram-card">
+        <h2>7. Data Flow Diagram - Level 0 (Context)</h2>
+        <p class="subtitle">High-level system context showing external entities and data stores</p>
+        <div class="mermaid" id="diagram7">
+graph TB
+    G["Guest User"] -->|"Register / Login"| SYS["MVE Commerce System"]
+    C["Customer"] -->|"Browse, Cart, Order"| SYS
+    A["Admin"] -->|"Manage Products, Orders"| SYS
+    SYS -->|"Product Info, Order Status"| C
+    SYS -->|"Analytics, Reports"| A
+    SYS -->|"Store and Retrieve Data"| DB[("MySQL Database")]
+    SYS -->|"Verify OAuth Token"| GOOG["Google OAuth 2.0"]
+    GOOG -->|"User Identity"| SYS
+        </div>
+        <button class="save-btn" onclick="saveDiagram('diagram7', '7_DFD_Level0')">Save as PNG</button>
+    </div>
+
+    <!-- 8. DFD LEVEL 1 -->
+    <div class="diagram-card">
+        <h2>8. Data Flow Diagram - Level 1 (Detailed)</h2>
+        <p class="subtitle">Detailed data flow through 5 core processes</p>
+        <div class="mermaid" id="diagram8">
+graph TB
+    U["User"] -->|"Credentials"| P1["1.0 Authentication"]
+    P1 -->|"JWT Token"| U
+    P1 -->|"Read/Write"| DS1[("Users DB")]
+    P1 -->|"Verify"| GAPI["Google OAuth"]
+
+    U -->|"Browse/Search"| P2["2.0 Product Mgmt"]
+    P2 -->|"Product List"| U
+    P2 -->|"Read/Write"| DS2[("Products DB")]
+    P2 -->|"Read"| DS3[("Categories DB")]
+
+    U -->|"Add/Update/Remove"| P3["3.0 Cart Mgmt"]
+    P3 -->|"Cart Contents"| U
+    P3 -->|"Read/Write"| DS4[("Cart Items DB")]
+    P3 -->|"Read"| DS2
+
+    U -->|"Place Order"| P4["4.0 Order Processing"]
+    P4 -->|"Order Confirmation"| U
+    P4 -->|"Read"| DS4
+    P4 -->|"Read"| DS5[("Addresses DB")]
+    P4 -->|"Write"| DS6[("Orders DB")]
+    P4 -->|"Update Stock"| DS2
+    P4 -->|"Clear Cart"| DS4
+
+    U -->|"Manage"| P5["5.0 Address Mgmt"]
+    P5 -->|"Address List"| U
+    P5 -->|"Read/Write"| DS5
+        </div>
+        <button class="save-btn" onclick="saveDiagram('diagram8', '8_DFD_Level1')">Save as PNG</button>
+    </div>
+
+    <!-- 9. ORDER STATE DIAGRAM -->
+    <div class="diagram-card">
+        <h2>9. Order Status State Diagram</h2>
+        <p class="subtitle">Order lifecycle from PENDING to DELIVERED or CANCELLED</p>
+        <div class="mermaid" id="diagram9">
+stateDiagram-v2
+    [*] --> PENDING : Order Placed
+    PENDING --> CONFIRMED : Admin Confirms
+    PENDING --> CANCELLED : Customer or Admin Cancels
+    CONFIRMED --> PROCESSING : Processing Started
+    CONFIRMED --> CANCELLED : Admin Cancels
+    PROCESSING --> SHIPPED : Dispatched
+    SHIPPED --> DELIVERED : Delivery Confirmed
+    DELIVERED --> [*]
+    CANCELLED --> [*]
+        </div>
+        <button class="save-btn" onclick="saveDiagram('diagram9', '9_Order_State_Diagram')">Save as PNG</button>
+    </div>
+
+    <!-- 10. DEPLOYMENT ARCHITECTURE -->
+    <div class="diagram-card">
+        <h2>10. Deployment Architecture</h2>
+        <p class="subtitle">Frontend, Backend, Database servers with ports and external services</p>
+        <div class="mermaid" id="diagram10">
+graph TD
+    subgraph FRONTEND["Frontend Server - Port 3000"]
+        REACT["React 18 App"]
+        REDUX["Redux State Management"]
+        AXIOS["Axios HTTP Client"]
+        TW["Tailwind CSS"]
+    end
+
+    subgraph BACKEND["Backend Server - Port 6969"]
+        SPRING["Spring Boot Application"]
+        SECU["Spring Security + JWT"]
+        HIB["Hibernate / JPA ORM"]
+        MAV["Maven Build Tool"]
+    end
+
+    subgraph DATABASE["Database Server - Port 3306"]
+        MYSQL["MySQL 8.0"]
+        T1["7 Tables"]
+        T2["6 Performance Indexes"]
+    end
+
+    subgraph EXTERNAL["External Services"]
+        GOAUTH["Google OAuth 2.0"]
+    end
+
+    REACT --> AXIOS
+    AXIOS -->|"REST API + JWT Auth Header"| SPRING
+    SPRING --> SECU
+    SECU --> HIB
+    HIB -->|"JDBC Connection"| MYSQL
+    REACT -->|"OAuth Authentication Flow"| GOAUTH
+    GOAUTH -->|"Token Verification"| SPRING
+        </div>
+        <button class="save-btn" onclick="saveDiagram('diagram10', '10_Deployment_Architecture')">Save as PNG</button>
+    </div>
+
+    <!-- 11. API ENDPOINTS MAP -->
+    <div class="diagram-card">
+        <h2>11. REST API Endpoints Map</h2>
+        <p class="subtitle">All 38+ API endpoints organized by domain</p>
+        <div class="mermaid" id="diagram11">
+graph LR
+    subgraph AUTH["/auth - Authentication"]
+        A1["POST /register"]
+        A2["POST /login"]
+        A3["GET /me"]
+        A4["POST /refresh"]
+        A5["POST /forgot-password"]
+        A6["POST /verify-otp"]
+        A7["POST /reset-password"]
+        A8["POST /google-login"]
+        A9["POST /google-register"]
+    end
+
+    subgraph PROD["/products - Products"]
+        P1["GET / paginated"]
+        P2["GET /id"]
+        P3["GET /search"]
+        P4["GET /category/id"]
+        P5["POST / Admin"]
+        P6["PUT /id Admin"]
+        P7["DELETE /id Admin"]
+        P8["PATCH /id/toggle-active"]
+        P9["GET /admin/all"]
+        P10["GET /admin/low-stock"]
+    end
+
+    subgraph CAT["/categories"]
+        C1["GET /"]
+        C2["GET /id"]
+        C3["POST / Admin"]
+        C4["PUT /id Admin"]
+        C5["DELETE /id Admin"]
+        C6["PATCH /id/toggle-active"]
+    end
+
+    subgraph CART["/cart"]
+        CR1["GET /"]
+        CR2["POST /"]
+        CR3["PUT /cartItemId"]
+        CR4["DELETE /cartItemId"]
+        CR5["DELETE / clear all"]
+    end
+
+    subgraph ORD["/orders"]
+        O1["GET /"]
+        O2["GET /id"]
+        O3["POST /"]
+        O4["PATCH /id/cancel"]
+        O5["GET /admin/all"]
+        O6["PUT /id/status"]
+        O7["GET /admin/stats"]
+    end
+
+    subgraph ADDR["/addresses"]
+        AD1["GET /"]
+        AD2["GET /id"]
+        AD3["POST /"]
+        AD4["PUT /id"]
+        AD5["DELETE /id"]
+    end
+        </div>
+        <button class="save-btn" onclick="saveDiagram('diagram11', '11_API_Endpoints_Map')">Save as PNG</button>
+    </div>
+
+</div>
+
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        securityLevel: 'loose',
+        er: { useMaxWidth: true },
+        sequence: { useMaxWidth: true, showSequenceNumbers: true },
+        flowchart: { useMaxWidth: true, htmlLabels: true }
+    });
+
+    function saveDiagram(containerId, filename) {
+        const container = document.getElementById(containerId);
+        const svg = container.querySelector('svg');
+        if (!svg) { alert('Diagram not rendered yet. Please wait.'); return; }
+
+        // Get the actual rendered size of the SVG
+        const bbox = svg.getBoundingClientRect();
+        const svgClone = svg.cloneNode(true);
+
+        // Force explicit width and height on the SVG clone
+        const fullWidth = Math.max(bbox.width, svg.scrollWidth, parseFloat(svg.getAttribute('width')) || bbox.width);
+        const fullHeight = Math.max(bbox.height, svg.scrollHeight, parseFloat(svg.getAttribute('height')) || bbox.height);
+
+        // Check viewBox for actual content size
+        const viewBox = svg.getAttribute('viewBox');
+        let vbWidth = fullWidth, vbHeight = fullHeight;
+        if (viewBox) {
+            const parts = viewBox.split(/[\s,]+/).map(Number);
+            if (parts.length === 4) {
+                vbWidth = parts[2];
+                vbHeight = parts[3];
+            }
+        }
+
+        const finalWidth = Math.max(fullWidth, vbWidth);
+        const finalHeight = Math.max(fullHeight, vbHeight);
+
+        svgClone.setAttribute('width', finalWidth);
+        svgClone.setAttribute('height', finalHeight);
+        svgClone.style.maxWidth = 'none';
+        svgClone.style.width = finalWidth + 'px';
+        svgClone.style.height = finalHeight + 'px';
+
+        // Add white background rect as first child
+        const bgRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        bgRect.setAttribute('width', '100%');
+        bgRect.setAttribute('height', '100%');
+        bgRect.setAttribute('fill', '#ffffff');
+        svgClone.insertBefore(bgRect, svgClone.firstChild);
+
+        // Add required CSS styles inline
+        const styleEl = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+        styleEl.textContent = '* { font-family: "Segoe UI", Arial, sans-serif; }';
+        svgClone.insertBefore(styleEl, svgClone.firstChild);
+
+        const svgData = new XMLSerializer().serializeToString(svgClone);
+        const svgBase64 = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+
+        const scale = 2;
+        const canvas = document.createElement('canvas');
+        canvas.width = finalWidth * scale;
+        canvas.height = finalHeight * scale;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const img = new Image();
+        img.onload = function () {
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const downloadLink = document.createElement('a');
+                downloadLink.href = url;
+                downloadLink.download = filename + '.png';
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                setTimeout(function() { URL.revokeObjectURL(url); }, 100);
+            }, 'image/png');
+        };
+        img.onerror = function() {
+            // Fallback: download as SVG instead
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+            downloadLink.download = filename + '.svg';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            setTimeout(function() { URL.revokeObjectURL(url); }, 100);
+        };
+        img.src = svgBase64;
+    }
+</script>
+
+</body>
+</html>

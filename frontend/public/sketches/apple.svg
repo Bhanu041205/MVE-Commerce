@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="100" cy="92" r="40" stroke-width="2"/>
+    <path d="M95 54 Q100 60 105 54" stroke-width="1.5"/>
+    <path d="M100 54 L100 38" stroke-width="2"/>
+    <path d="M100 42 Q112 35 115 45" stroke-width="1.5"/>
+    <path d="M85 82 Q88 77 92 82" stroke-width="0.8"/>
+    <path d="M108 82 Q111 77 114 82" stroke-width="0.8"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Apple</text>
+</svg>

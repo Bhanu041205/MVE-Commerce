@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="100" cy="92" rx="35" ry="45" stroke-width="2" transform="rotate(-15 100 92)"/>
+    <path d="M108 48 Q105 35 110 28" stroke-width="2"/>
+    <path d="M90 60 Q95 55 105 58" stroke-width="1"/>
+    <path d="M85 75 Q95 70 108 72" stroke-width="0.8"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Mango</text>
+</svg>

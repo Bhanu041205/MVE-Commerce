@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="100" cy="118" rx="48" ry="14" stroke-width="2"/>
+    <path d="M52 118 Q52 140 100 145 Q148 140 148 118" stroke-width="2"/>
+    <ellipse cx="78" cy="112" rx="7" ry="3.5" stroke-width="1.2" transform="rotate(-20 78 112)"/>
+    <ellipse cx="98" cy="110" rx="7" ry="3.5" stroke-width="1.2" transform="rotate(15 98 110)"/>
+    <ellipse cx="118" cy="113" rx="7" ry="3.5" stroke-width="1.2" transform="rotate(-8 118 113)"/>
+    <ellipse cx="88" cy="120" rx="7" ry="3.5" stroke-width="1.2" transform="rotate(5 88 120)"/>
+    <ellipse cx="112" cy="118" rx="7" ry="3.5" stroke-width="1.2" transform="rotate(-22 112 118)"/>
+    <path d="M100 90 L100 48" stroke-width="1.5"/>
+    <path d="M100 65 Q85 55 82 62" stroke-width="1.2"/>
+    <path d="M100 58 Q115 48 118 55" stroke-width="1.2"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Flax Seeds</text>
+</svg>

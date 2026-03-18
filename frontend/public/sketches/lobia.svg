@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="62" cy="68" rx="14" ry="10" stroke-width="1.5"/>
+    <circle cx="56" cy="68" r="3" fill="#4a3728" opacity="0.5"/>
+    <ellipse cx="108" cy="65" rx="14" ry="10" stroke-width="1.5"/>
+    <circle cx="102" cy="65" r="3" fill="#4a3728" opacity="0.5"/>
+    <ellipse cx="148" cy="70" rx="14" ry="10" stroke-width="1.5"/>
+    <circle cx="142" cy="70" r="3" fill="#4a3728" opacity="0.5"/>
+    <ellipse cx="75" cy="105" rx="14" ry="10" stroke-width="1.5"/>
+    <circle cx="69" cy="105" r="3" fill="#4a3728" opacity="0.5"/>
+    <ellipse cx="120" cy="102" rx="14" ry="10" stroke-width="1.5"/>
+    <circle cx="114" cy="102" r="3" fill="#4a3728" opacity="0.5"/>
+    <ellipse cx="90" cy="138" rx="14" ry="10" stroke-width="1.5"/>
+    <circle cx="84" cy="138" r="3" fill="#4a3728" opacity="0.5"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Lobia</text>
+</svg>

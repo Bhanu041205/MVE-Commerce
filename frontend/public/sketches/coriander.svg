@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M100 160 L100 80" stroke-width="2"/>
+    <path d="M100 80 L75 55 M100 80 L125 55 M100 80 L100 50" stroke-width="1.5"/>
+    <circle cx="75" cy="55" r="4" stroke-width="1.2" fill="#4a3728" opacity="0.3"/>
+    <circle cx="125" cy="55" r="4" stroke-width="1.2" fill="#4a3728" opacity="0.3"/>
+    <circle cx="100" cy="50" r="4" stroke-width="1.2" fill="#4a3728" opacity="0.3"/>
+    <path d="M100 120 Q80 110 70 115 Q62 125 75 128 Q88 128 100 120" stroke-width="1.5"/>
+    <path d="M100 120 Q120 110 130 115 Q138 125 125 128 Q112 128 100 120" stroke-width="1.5"/>
+    <path d="M100 140 Q80 130 72 138 Q65 148 78 150 Q90 148 100 140" stroke-width="1.5"/>
+    <path d="M100 140 Q120 130 128 138 Q135 148 122 150 Q110 148 100 140" stroke-width="1.5"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Coriander</text>
+</svg>

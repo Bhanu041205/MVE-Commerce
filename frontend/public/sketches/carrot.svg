@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M85 45 L75 155 Q100 165 105 155 L95 45 Z" stroke-width="2"/>
+    <path d="M80 70 Q90 65 100 70" stroke-width="0.8"/>
+    <path d="M78 95 Q90 90 102 95" stroke-width="0.8"/>
+    <path d="M77 120 Q90 115 101 120" stroke-width="0.8"/>
+    <path d="M90 45 Q80 25 70 28" stroke-width="1.5"/>
+    <path d="M90 45 Q85 22 90 18" stroke-width="1.5"/>
+    <path d="M90 45 Q95 25 105 22" stroke-width="1.5"/>
+    <path d="M90 45 Q100 28 112 30" stroke-width="1.5"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Carrot</text>
+</svg>

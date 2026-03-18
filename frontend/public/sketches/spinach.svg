@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M100 160 L95 90" stroke-width="2"/>
+    <path d="M95 90 Q70 70 65 80 Q55 95 72 100 Q85 100 95 90" stroke-width="2"/>
+    <path d="M95 100 Q65 85 60 100 Q52 118 70 120 Q82 118 95 105" stroke-width="2"/>
+    <path d="M100 160 L105 95" stroke-width="2"/>
+    <path d="M105 95 Q130 75 135 85 Q145 100 128 105 Q115 105 105 95" stroke-width="2"/>
+    <path d="M105 108 Q135 92 140 105 Q148 122 130 125 Q118 122 105 112" stroke-width="2"/>
+    <path d="M80 82 Q95 88 90 95" stroke-width="0.8"/>
+    <path d="M120 88 Q108 92 110 100" stroke-width="0.8"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Spinach</text>
+</svg>

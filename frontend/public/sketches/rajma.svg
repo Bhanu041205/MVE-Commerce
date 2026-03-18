@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M60 65 Q50 72 50 82 Q50 92 60 95 Q66 95 68 88 Q70 82 68 76 Q66 68 60 65" stroke-width="1.5"/>
+    <path d="M85 72 Q75 78 75 88 Q75 98 85 100 Q90 100 92 94 Q94 88 92 82 Q90 76 85 72" stroke-width="1.5"/>
+    <path d="M115 65 Q105 72 105 82 Q105 92 115 95 Q120 95 122 88 Q124 82 122 76 Q120 68 115 65" stroke-width="1.5"/>
+    <path d="M140 72 Q130 78 130 88 Q130 98 140 100 Q145 100 147 94 Q149 88 147 82 Q145 76 140 72" stroke-width="1.5"/>
+    <path d="M72 110 Q62 116 62 126 Q62 136 72 138 Q78 138 80 132 Q82 126 80 120 Q78 114 72 110" stroke-width="1.5"/>
+    <path d="M100 115 Q90 122 90 132 Q90 142 100 145 Q106 145 108 138 Q110 132 108 126 Q106 118 100 115" stroke-width="1.5"/>
+    <path d="M128 110 Q118 116 118 126 Q118 136 128 138 Q134 138 136 132 Q138 126 136 120 Q134 114 128 110" stroke-width="1.5"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Rajma</text>
+</svg>

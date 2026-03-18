@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M60 68 Q55 62 58 55 Q62 52 68 56 Q72 62 68 70 Q64 74 60 68" stroke-width="1.5" fill="#4a3728" opacity="0.3"/>
+    <path d="M90 62 Q85 56 88 50 Q92 47 98 52 Q102 58 98 65 Q94 68 90 62" stroke-width="1.5" fill="#4a3728" opacity="0.3"/>
+    <path d="M120 65 Q115 59 118 53 Q122 50 128 55 Q132 61 128 68 Q124 72 120 65" stroke-width="1.5" fill="#4a3728" opacity="0.3"/>
+    <path d="M72 98 Q67 92 70 86 Q74 83 80 88 Q84 94 80 100 Q76 104 72 98" stroke-width="1.5" fill="#4a3728" opacity="0.3"/>
+    <path d="M105 95 Q100 89 103 83 Q107 80 113 85 Q117 91 113 98 Q109 102 105 95" stroke-width="1.5" fill="#4a3728" opacity="0.3"/>
+    <path d="M140 92 Q135 86 138 80 Q142 77 148 82 Q152 88 148 95 Q144 99 140 92" stroke-width="1.5" fill="#4a3728" opacity="0.3"/>
+    <path d="M85 128 Q80 122 83 116 Q87 113 93 118 Q97 124 93 130 Q89 134 85 128" stroke-width="1.5" fill="#4a3728" opacity="0.3"/>
+    <path d="M118 125 Q113 119 116 113 Q120 110 126 115 Q130 121 126 128 Q122 132 118 125" stroke-width="1.5" fill="#4a3728" opacity="0.3"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Raisins</text>
+</svg>

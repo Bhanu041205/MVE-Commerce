@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M55 88 Q55 140 100 145 Q145 140 145 88" stroke-width="2"/>
+    <path d="M50 88 L150 88" stroke-width="2.5"/>
+    <path d="M70 152 Q100 162 130 152" stroke-width="1.5"/>
+    <circle cx="75" cy="85" r="5" stroke-width="1.2"/>
+    <circle cx="90" cy="83" r="5" stroke-width="1.2"/>
+    <circle cx="105" cy="85" r="5" stroke-width="1.2"/>
+    <circle cx="120" cy="83" r="5" stroke-width="1.2"/>
+    <path d="M82 75 Q80 60 84 50" stroke-width="1.2"/>
+    <path d="M100 72 Q98 55 102 42" stroke-width="1.2"/>
+    <path d="M118 75 Q116 60 120 50" stroke-width="1.2"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Dals & Lentils</text>
+</svg>

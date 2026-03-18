@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="100" cy="78" rx="32" ry="18" stroke-width="2"/>
+    <path d="M100 96 L100 162" stroke-width="2.5"/>
+    <circle cx="85" cy="72" r="2" fill="#4a3728"/>
+    <circle cx="92" cy="78" r="2" fill="#4a3728"/>
+    <circle cx="100" cy="70" r="2" fill="#4a3728"/>
+    <circle cx="108" cy="76" r="2" fill="#4a3728"/>
+    <circle cx="95" cy="84" r="2" fill="#4a3728"/>
+    <circle cx="105" cy="82" r="2" fill="#4a3728"/>
+    <circle cx="115" cy="74" r="2" fill="#4a3728"/>
+    <circle cx="88" cy="68" r="2" fill="#4a3728"/>
+    <circle cx="50" cy="55" r="1.5" fill="#4a3728"/>
+    <circle cx="60" cy="48" r="1.5" fill="#4a3728"/>
+    <circle cx="142" cy="52" r="1.5" fill="#4a3728"/>
+    <circle cx="148" cy="60" r="1.5" fill="#4a3728"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Chia Seeds</text>
+</svg>

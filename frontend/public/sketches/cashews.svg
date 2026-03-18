@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M75 55 Q95 50 100 65 Q105 80 95 90 Q85 100 70 95 Q60 85 65 70 Q68 58 75 55" stroke-width="2"/>
+    <path d="M100 65 Q95 75 95 90" stroke-width="1"/>
+    <path d="M125 60 Q145 55 150 70 Q155 85 145 95 Q135 105 120 100 Q110 90 115 75 Q118 63 125 60" stroke-width="2"/>
+    <path d="M150 70 Q145 80 145 95" stroke-width="1"/>
+    <path d="M90 115 Q110 110 115 125 Q120 140 110 150 Q100 160 85 155 Q75 145 80 130 Q83 118 90 115" stroke-width="2"/>
+    <path d="M115 125 Q110 135 110 150" stroke-width="1"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Cashews</text>
+</svg>

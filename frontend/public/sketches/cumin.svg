@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="100" cy="75" rx="32" ry="18" stroke-width="2"/>
+    <path d="M100 93 L100 162" stroke-width="2.5"/>
+    <path d="M96 160 Q100 168 104 160" stroke-width="2"/>
+    <ellipse cx="85" cy="72" rx="6" ry="3" stroke-width="1.2" transform="rotate(-20 85 72)"/>
+    <ellipse cx="100" cy="68" rx="6" ry="3" stroke-width="1.2" transform="rotate(10 100 68)"/>
+    <ellipse cx="115" cy="72" rx="6" ry="3" stroke-width="1.2" transform="rotate(-15 115 72)"/>
+    <ellipse cx="90" cy="80" rx="6" ry="3" stroke-width="1.2" transform="rotate(5 90 80)"/>
+    <ellipse cx="108" cy="78" rx="6" ry="3" stroke-width="1.2" transform="rotate(-8 108 78)"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Cumin (Jeera)</text>
+</svg>

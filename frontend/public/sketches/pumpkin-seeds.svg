@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M100 48 Q62 52 58 90 Q52 128 100 138 Q148 128 142 90 Q138 52 100 48" stroke-width="2"/>
+    <path d="M100 48 Q82 52 80 90 Q82 128 100 138" stroke-width="1"/>
+    <path d="M100 48 Q118 52 120 90 Q118 128 100 138" stroke-width="1"/>
+    <path d="M96 48 Q93 34 100 30 Q107 34 104 48" stroke-width="1.5"/>
+    <ellipse cx="70" cy="158" rx="7" ry="4" stroke-width="1.2" transform="rotate(-15 70 158)"/>
+    <ellipse cx="95" cy="160" rx="7" ry="4" stroke-width="1.2" transform="rotate(10 95 160)"/>
+    <ellipse cx="120" cy="157" rx="7" ry="4" stroke-width="1.2" transform="rotate(-5 120 157)"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Pumpkin Seeds</text>
+</svg>

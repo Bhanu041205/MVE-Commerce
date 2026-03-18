@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M55 92 Q55 142 100 148 Q145 142 145 92" stroke-width="2"/>
+    <ellipse cx="100" cy="92" rx="45" ry="14" stroke-width="2"/>
+    <path d="M122 82 L155 48" stroke-width="3"/>
+    <ellipse cx="158" cy="44" rx="8" ry="5" stroke-width="2" transform="rotate(-50 158 44)"/>
+    <circle cx="85" cy="98" r="3" fill="#4a3728"/>
+    <circle cx="100" cy="100" r="2.5" fill="#4a3728"/>
+    <circle cx="112" cy="97" r="2" fill="#4a3728"/>
+    <circle cx="95" cy="108" r="3" fill="#4a3728"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Spices & Masala</text>
+</svg>

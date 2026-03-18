@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M70 60 Q55 80 60 105 Q65 120 80 120 Q90 115 88 95 Q86 75 70 60" stroke-width="2"/>
+    <path d="M62 90 Q75 85 85 95" stroke-width="1"/>
+    <path d="M120 55 Q105 75 110 100 Q115 115 130 115 Q140 110 138 90 Q136 70 120 55" stroke-width="2"/>
+    <path d="M112 85 Q125 80 135 90" stroke-width="1"/>
+    <path d="M95 110 Q80 130 85 155 Q90 168 105 168 Q115 163 113 143 Q111 125 95 110" stroke-width="2"/>
+    <path d="M87 140 Q100 135 110 143" stroke-width="1"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Almonds</text>
+</svg>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M55 85 Q55 138 100 142 Q145 138 145 85" stroke-width="2"/>
+    <path d="M50 85 L150 85" stroke-width="2.5"/>
+    <path d="M70 150 Q100 160 130 150" stroke-width="1.5"/>
+    <path d="M82 72 Q80 58 84 48" stroke-width="1.2"/>
+    <path d="M100 68 Q98 52 102 40" stroke-width="1.2"/>
+    <path d="M118 72 Q116 58 120 48" stroke-width="1.2"/>
+    <circle cx="72" cy="82" r="5" stroke-width="1.2"/>
+    <circle cx="86" cy="80" r="5" stroke-width="1.2"/>
+    <circle cx="100" cy="82" r="5" stroke-width="1.2"/>
+    <circle cx="114" cy="80" r="5" stroke-width="1.2"/>
+    <circle cx="128" cy="82" r="5" stroke-width="1.2"/>
+    <circle cx="80" cy="92" r="5" stroke-width="1.2"/>
+    <circle cx="95" cy="94" r="5" stroke-width="1.2"/>
+    <circle cx="110" cy="92" r="5" stroke-width="1.2"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Toor Dal</text>
+</svg>

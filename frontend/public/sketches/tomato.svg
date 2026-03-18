@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="100" cy="92" r="38" stroke-width="2"/>
+    <path d="M78 58 L88 65 L100 56 L112 65 L122 58" stroke-width="1.5"/>
+    <path d="M100 56 L100 42" stroke-width="1.5"/>
+    <path d="M75 85 Q100 78 125 85" stroke-width="0.8"/>
+    <path d="M72 95 Q100 102 128 95" stroke-width="0.8"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Tomato</text>
+</svg>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M55 85 Q55 138 100 142 Q145 138 145 85" stroke-width="2"/>
+    <path d="M50 85 L150 85" stroke-width="2.5"/>
+    <path d="M70 150 Q100 160 130 150" stroke-width="1.5"/>
+    <path d="M82 72 Q80 58 84 48" stroke-width="1.2"/>
+    <path d="M100 68 Q98 52 102 40" stroke-width="1.2"/>
+    <path d="M118 72 Q116 58 120 48" stroke-width="1.2"/>
+    <circle cx="72" cy="82" r="4" stroke-width="1.2"/>
+    <circle cx="84" cy="80" r="4" stroke-width="1.2"/>
+    <circle cx="96" cy="82" r="4" stroke-width="1.2"/>
+    <circle cx="108" cy="80" r="4" stroke-width="1.2"/>
+    <circle cx="120" cy="82" r="4" stroke-width="1.2"/>
+    <circle cx="132" cy="83" r="4" stroke-width="1.2"/>
+    <circle cx="78" cy="90" r="4" stroke-width="1.2"/>
+    <circle cx="90" cy="92" r="4" stroke-width="1.2"/>
+    <circle cx="102" cy="90" r="4" stroke-width="1.2"/>
+    <circle cx="114" cy="92" r="4" stroke-width="1.2"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Masoor Dal</text>
+</svg>

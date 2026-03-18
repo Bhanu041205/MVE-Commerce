@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M45 105 Q45 150 100 155 Q155 150 155 105" stroke-width="2"/>
+    <path d="M40 105 L160 105" stroke-width="2"/>
+    <path d="M55 118 L145 118 M60 132 L140 132" stroke-width="0.8"/>
+    <circle cx="78" cy="82" r="18" stroke-width="1.5"/>
+    <path d="M78 64 L78 58" stroke-width="1.5"/>
+    <path d="M105 65 Q128 58 135 80" stroke-width="2"/>
+    <circle cx="120" cy="85" r="15" stroke-width="1.5"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Fresh Fruits</text>
+</svg>

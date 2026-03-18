@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="100" cy="90" r="38" stroke-width="2"/>
+    <circle cx="100" cy="90" r="32" stroke-width="1.2"/>
+    <path d="M100 58 L100 122" stroke-width="1.5"/>
+    <path d="M75 68 Q100 85 125 68" stroke-width="1.2"/>
+    <path d="M72 90 Q100 105 128 90" stroke-width="1.2"/>
+    <path d="M75 112 Q100 95 125 112" stroke-width="1.2"/>
+    <path d="M80 75 Q88 85 80 95" stroke-width="0.8"/>
+    <path d="M120 75 Q112 85 120 95" stroke-width="0.8"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Walnuts</text>
+</svg>

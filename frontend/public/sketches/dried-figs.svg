@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="72" cy="80" r="22" stroke-width="2"/>
+    <path d="M72 58 L72 102" stroke-width="1"/>
+    <path d="M50 80 L94 80" stroke-width="1"/>
+    <path d="M56 65 L88 95" stroke-width="0.8"/>
+    <path d="M56 95 L88 65" stroke-width="0.8"/>
+    <path d="M72 58 Q72 50 78 48" stroke-width="1.5"/>
+    <circle cx="130" cy="105" r="22" stroke-width="2"/>
+    <path d="M130 83 L130 127" stroke-width="1"/>
+    <path d="M108 105 L152 105" stroke-width="1"/>
+    <path d="M114 90 L146 120" stroke-width="0.8"/>
+    <path d="M114 120 L146 90" stroke-width="0.8"/>
+    <path d="M130 83 Q130 75 136 73" stroke-width="1.5"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Dried Figs</text>
+</svg>

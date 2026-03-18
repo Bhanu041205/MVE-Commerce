@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="65" cy="70" r="12" stroke-width="1.5"/>
+    <path d="M60 62 Q65 58 70 62" stroke-width="1"/>
+    <circle cx="105" cy="68" r="12" stroke-width="1.5"/>
+    <path d="M100 60 Q105 56 110 60" stroke-width="1"/>
+    <circle cx="140" cy="72" r="12" stroke-width="1.5"/>
+    <path d="M135 64 Q140 60 145 64" stroke-width="1"/>
+    <circle cx="78" cy="105" r="12" stroke-width="1.5"/>
+    <path d="M73 97 Q78 93 83 97" stroke-width="1"/>
+    <circle cx="118" cy="102" r="12" stroke-width="1.5"/>
+    <path d="M113 94 Q118 90 123 94" stroke-width="1"/>
+    <circle cx="95" cy="138" r="12" stroke-width="1.5"/>
+    <path d="M90 130 Q95 126 100 130" stroke-width="1"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Kabuli Chana</text>
+</svg>

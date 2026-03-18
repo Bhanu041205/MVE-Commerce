@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M58 95 Q58 145 100 150 Q142 145 142 95" stroke-width="2"/>
+    <ellipse cx="100" cy="95" rx="42" ry="14" stroke-width="2"/>
+    <path d="M125 85 L158 50" stroke-width="3"/>
+    <ellipse cx="162" cy="46" rx="10" ry="6" stroke-width="2" transform="rotate(-50 162 46)"/>
+    <circle cx="82" cy="100" r="3" fill="#4a3728"/>
+    <circle cx="95" cy="98" r="2" fill="#4a3728"/>
+    <circle cx="108" cy="101" r="2.5" fill="#4a3728"/>
+    <circle cx="120" cy="98" r="2" fill="#4a3728"/>
+    <path d="M72 158 Q100 168 128 158" stroke-width="1.5"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Garam Masala</text>
+</svg>

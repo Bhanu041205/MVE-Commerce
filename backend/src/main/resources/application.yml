@@ -1,0 +1,64 @@
+spring:
+  application:
+    name: mvecommerce-backend
+  datasource:
+    url: jdbc:postgresql://ep-flat-unit-ai50sjq8-pooler.c-4.us-east-1.aws.neon.tech:5432/neondb?sslmode=require
+    username: neondb_owner
+    password: npg_HzrORgZGC5U4
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      idle-timeout: 30000
+      max-lifetime: 120000
+      connection-timeout: 20000
+      keepalive-time: 30000
+      validation-timeout: 5000
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+server:
+  port: 6969
+  servlet:
+    context-path: /api
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# JWT Configuration
+jwt:
+  secret: mvecommerce_jwt_secret_key_for_authentication_and_token_generation_purposes_2026
+  expiration: 86400000
+  refresh-expiration: 604800000
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    com.mvecommerce: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+# CORS Configuration
+cors:
+  allowed-origins: http://localhost:3000,http://localhost:3001
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  allowed-headers: "*"
+  allow-credentials: true
+
+# Optional notification config for customer order notes.
+app:
+  order-notes:
+    # Comma-separated emails for admin/seller recipients.
+    notify-recipients: ""
+    # Sender used by notification emails.
+    from-email: no-reply@mvecommerce.local

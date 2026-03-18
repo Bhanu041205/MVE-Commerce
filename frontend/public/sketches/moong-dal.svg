@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M55 85 Q55 138 100 142 Q145 138 145 85" stroke-width="2"/>
+    <path d="M50 85 L150 85" stroke-width="2.5"/>
+    <path d="M70 150 Q100 160 130 150" stroke-width="1.5"/>
+    <path d="M82 72 Q80 58 84 48" stroke-width="1.2"/>
+    <path d="M100 68 Q98 52 102 40" stroke-width="1.2"/>
+    <path d="M118 72 Q116 58 120 48" stroke-width="1.2"/>
+    <ellipse cx="72" cy="82" rx="6" ry="4" stroke-width="1.2"/>
+    <path d="M72 78 L72 86" stroke-width="0.8"/>
+    <ellipse cx="88" cy="80" rx="6" ry="4" stroke-width="1.2"/>
+    <path d="M88 76 L88 84" stroke-width="0.8"/>
+    <ellipse cx="104" cy="82" rx="6" ry="4" stroke-width="1.2"/>
+    <path d="M104 78 L104 86" stroke-width="0.8"/>
+    <ellipse cx="120" cy="80" rx="6" ry="4" stroke-width="1.2"/>
+    <path d="M120 76 L120 84" stroke-width="0.8"/>
+    <ellipse cx="80" cy="92" rx="6" ry="4" stroke-width="1.2"/>
+    <ellipse cx="96" cy="94" rx="6" ry="4" stroke-width="1.2"/>
+    <ellipse cx="112" cy="92" rx="6" ry="4" stroke-width="1.2"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Moong Dal</text>
+</svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M100 42 Q135 72 125 108 Q115 138 100 142 Q85 138 75 108 Q65 72 100 42" stroke-width="2"/>
+    <path d="M82 40 Q92 30 100 36 Q108 30 118 40" stroke-width="1.5"/>
+    <path d="M88 35 Q90 25 94 30" stroke-width="1.2"/>
+    <path d="M112 35 Q110 25 106 30" stroke-width="1.2"/>
+    <circle cx="92" cy="75" r="2" fill="#4a3728"/>
+    <circle cx="108" cy="78" r="2" fill="#4a3728"/>
+    <circle cx="88" cy="95" r="2" fill="#4a3728"/>
+    <circle cx="112" cy="98" r="2" fill="#4a3728"/>
+    <circle cx="95" cy="115" r="2" fill="#4a3728"/>
+    <circle cx="105" cy="118" r="2" fill="#4a3728"/>
+    <circle cx="100" cy="132" r="2" fill="#4a3728"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Strawberry</text>
+</svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fdf6e3" rx="10"/>
+  <g stroke="#4a3728" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="72" cy="78" rx="16" ry="22" stroke-width="2"/>
+    <path d="M58 68 Q72 55 86 68" stroke-width="1.5"/>
+    <circle cx="72" cy="82" r="6" fill="#4a3728" opacity="0.3"/>
+    <ellipse cx="128" cy="75" rx="16" ry="22" stroke-width="2"/>
+    <path d="M114 65 Q128 52 142 65" stroke-width="1.5"/>
+    <circle cx="128" cy="79" r="6" fill="#4a3728" opacity="0.3"/>
+    <ellipse cx="95" cy="130" rx="16" ry="22" stroke-width="2"/>
+    <path d="M81 120 Q95 107 109 120" stroke-width="1.5"/>
+    <circle cx="95" cy="134" r="6" fill="#4a3728" opacity="0.3"/>
+  </g>
+  <text x="100" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5c4033" font-style="italic">Pistachios</text>
+</svg>
