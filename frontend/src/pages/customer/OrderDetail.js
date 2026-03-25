@@ -18,19 +18,43 @@ const OrderDetail = () => {
   const [cancelling, setCancelling] = useState(false);
 
   useEffect(() => {
-    fetchOrder();
+    fetchOrder(false);
   }, [id]);
 
-  const fetchOrder = async () => {
-    setLoading(true);
+  useEffect(() => {
+    const handleOrdersUpdated = (event) => {
+      if (event.key === 'orders-updated-at') {
+        fetchOrder(true);
+      }
+    };
+
+    const handleFocus = () => {
+      fetchOrder(true);
+    };
+
+    const timerId = window.setInterval(() => fetchOrder(true), 10000);
+    window.addEventListener('storage', handleOrdersUpdated);
+    window.addEventListener('focus', handleFocus);
+
+    return () => {
+      window.clearInterval(timerId);
+      window.removeEventListener('storage', handleOrdersUpdated);
+      window.removeEventListener('focus', handleFocus);
+    };
+  }, [id]);
+
+  const fetchOrder = async (silent = false) => {
+    if (!silent) setLoading(true);
     try {
       const response = await getOrderById(id);
       setOrder(response.data);
     } catch (error) {
-      toast.error('Failed to load order details');
-      navigate('/orders');
+      if (!silent) {
+        toast.error('Failed to load order details');
+        navigate('/orders');
+      }
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
@@ -96,7 +120,7 @@ const OrderDetail = () => {
               </p>
             </div>
             <span className={`self-start px-4 py-2 rounded-full text-sm font-bold border ${getStatusColor(order.status)}`}>
-              {order.status.replace('_', ' ')}
+              {order.status.replace(/_/g, ' ')}
             </span>
           </div>
         </div>
@@ -119,7 +143,7 @@ const OrderDetail = () => {
                     <span className={`text-xs mt-1 text-center hidden sm:block ${
                       i <= currentStepIndex ? 'text-green-600 font-semibold' : 'text-gray-400'
                     }`}>
-                      {step.replace('_', ' ')}
+                      {step.replace(/_/g, ' ')}
                     </span>
                   </div>
                   {i < statusSteps.length - 1 && (
@@ -178,6 +202,22 @@ const OrderDetail = () => {
             {/* Payment Summary */}
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h3 className="font-bold text-gray-900 mb-4">Payment Summary</h3>
+              <div className="space-y-2 text-sm mb-4 pb-4 border-b border-gray-200">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Method</span>
+                  <span className="font-semibold">{(order.paymentMethod || 'COD').replace(/_/g, ' ')}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Payment Status</span>
+                  <span className="font-semibold">{(order.paymentStatus || 'PENDING').replace(/_/g, ' ')}</span>
+                </div>
+                {order.paymentDetails && (
+                  <div>
+                    <p className="text-gray-600 mb-1">Payment Details</p>
+                    <p className="text-gray-700 bg-gray-50 rounded-lg p-2 break-words">{order.paymentDetails}</p>
+                  </div>
+                )}
+              </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Subtotal</span>

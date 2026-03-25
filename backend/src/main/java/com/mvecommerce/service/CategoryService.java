@@ -45,12 +45,17 @@ public class CategoryService {
     }
 
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
-        if (categoryRepository.existsByName(categoryDTO.getName())) {
+        String normalizedName = categoryDTO.getName() != null ? categoryDTO.getName().trim() : "";
+        if (normalizedName.isEmpty()) {
+            throw new BadRequestException("Category name is required");
+        }
+
+        if (categoryRepository.existsByName(normalizedName)) {
             throw new BadRequestException("Category with this name already exists");
         }
 
         Category category = Category.builder()
-                .name(categoryDTO.getName())
+                .name(normalizedName)
                 .description(categoryDTO.getDescription())
                 .imageUrl(categoryDTO.getImageUrl() != null && !categoryDTO.getImageUrl().isEmpty()
                         ? categoryDTO.getImageUrl()

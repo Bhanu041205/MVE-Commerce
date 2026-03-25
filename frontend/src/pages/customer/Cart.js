@@ -101,7 +101,7 @@ const Cart = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900">Shopping Cart</h1>
+          <h1 className="mandova-similar text-4xl font-bold text-gray-900">Shopping Cart</h1>
           <p className="text-gray-600 mt-2">{cartItems.length} item(s) in your cart</p>
         </div>
 

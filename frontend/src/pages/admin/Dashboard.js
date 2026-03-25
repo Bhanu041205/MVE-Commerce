@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getAdminAllProducts, getAllOrders, getLowStockProducts, getAdminAllCategories, getOrderStats } from '../../api/endpoints';
-import { Package, ShoppingCart, DollarSign, Tag, AlertTriangle, TrendingUp, Clock, CheckCircle } from 'lucide-react';
+import { Package, ShoppingCart, DollarSign, Tag, AlertTriangle, TrendingUp, Clock, CheckCircle, Truck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import Spinner from '../../components/Spinner';
@@ -87,13 +87,13 @@ const AdminDashboard = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+        <h1 className="mandova-similar text-3xl font-bold text-gray-900">Admin Dashboard</h1>
         <p className="text-gray-600 mt-1">Overview of your store's performance</p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
+        <div className="bg-white rounded-xl shadow-md p-6 border border-black">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-500">Total Revenue</p>
@@ -105,7 +105,7 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
+        <div className="bg-white rounded-xl shadow-md p-6 border border-black">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-500">Total Orders</p>
@@ -117,7 +117,7 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500">
+        <div className="bg-white rounded-xl shadow-md p-6 border border-black">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-500">Total Products</p>
@@ -129,7 +129,7 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-orange-500">
+        <div className="bg-white rounded-xl shadow-md p-6 border border-black">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-500">Categories</p>
@@ -144,15 +144,15 @@ const AdminDashboard = () => {
 
       {/* Order Status Breakdown */}
       {Object.keys(stats.statusCounts).length > 0 && (
-        <div className="bg-white rounded-xl shadow-md p-6 mb-8">
+        <div className="bg-white rounded-xl shadow-md p-6 mb-8 border border-black">
           <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
             <TrendingUp size={20} /> Order Status Breakdown
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {Object.entries(stats.statusCounts).map(([status, count]) => (
-              <div key={status} className="text-center p-3 rounded-lg bg-gray-50">
+              <div key={status} className="text-center p-3 rounded-lg bg-[#f8efe3] border border-[#7a1f2b]">
                 <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-2 ${getStatusColor(status)}`}>
-                  {status.replace('_', ' ')}
+                  {status.replace(/_/g, ' ')}
                 </span>
                 <p className="text-2xl font-bold text-gray-900">{count}</p>
               </div>
@@ -163,12 +163,12 @@ const AdminDashboard = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Recent Orders */}
-        <div className="bg-white rounded-xl shadow-md p-6">
+        <div className="bg-white rounded-xl shadow-md p-6 border border-black">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
               <Clock size={20} /> Recent Orders
             </h2>
-            <Link to="/admin/orders" className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+            <Link to="/admin/orders" className="text-[#7a1f2b] hover:text-[#651723] text-sm font-medium">
               View All →
             </Link>
           </div>
@@ -177,7 +177,7 @@ const AdminDashboard = () => {
           ) : (
             <div className="space-y-3">
               {recentOrders.map(order => (
-                <div key={order.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                <div key={order.id} className="flex items-center justify-between p-3 bg-[#f8efe3] rounded-lg border border-[#7a1f2b] hover:bg-[#efe1cf] transition">
                   <div className="flex-1">
                     <p className="font-semibold text-gray-900 text-sm">{order.orderNumber}</p>
                     <p className="text-xs text-gray-500">{order.userName || order.userEmail || 'Customer'}</p>
@@ -196,12 +196,12 @@ const AdminDashboard = () => {
         </div>
 
         {/* Low Stock Alerts */}
-        <div className="bg-white rounded-xl shadow-md p-6">
+        <div className="bg-white rounded-xl shadow-md p-6 border border-black">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
               <AlertTriangle size={20} className="text-amber-500" /> Low Stock Alerts
             </h2>
-            <Link to="/admin/products" className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+            <Link to="/admin/products" className="text-[#7a1f2b] hover:text-[#651723] text-sm font-medium">
               Manage →
             </Link>
           </div>
@@ -213,7 +213,7 @@ const AdminDashboard = () => {
           ) : (
             <div className="space-y-3">
               {lowStockProducts.slice(0, 8).map(product => (
-                <div key={product.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                <div key={product.id} className="flex items-center gap-3 p-3 bg-[#f8efe3] rounded-lg border border-[#7a1f2b]">
                   <img
                     src={product.imageUrl || 'https://via.placeholder.com/40?text=?'}
                     alt={product.name}
@@ -237,23 +237,31 @@ const AdminDashboard = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="mt-8 bg-white rounded-xl shadow-md p-6">
+      <div className="mt-8 bg-white rounded-xl shadow-md p-6 border border-black">
         <h2 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <Link to="/admin/products" className="flex flex-col items-center gap-2 p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          <Link to="/admin/products" className="flex flex-col items-center gap-2 p-4 bg-[#f8efe3] border border-[#7a1f2b] rounded-lg hover:bg-[#efe1cf] transition">
             <Package size={24} className="text-purple-600" />
             <span className="text-sm font-medium text-gray-700">Manage Products</span>
           </Link>
-          <Link to="/admin/orders" className="flex flex-col items-center gap-2 p-4 bg-green-50 rounded-lg hover:bg-green-100 transition">
+          <Link to="/admin/orders" className="flex flex-col items-center gap-2 p-4 bg-[#f8efe3] border border-[#7a1f2b] rounded-lg hover:bg-[#efe1cf] transition">
             <ShoppingCart size={24} className="text-green-600" />
             <span className="text-sm font-medium text-gray-700">Manage Orders</span>
           </Link>
-          <Link to="/admin/categories" className="flex flex-col items-center gap-2 p-4 bg-orange-50 rounded-lg hover:bg-orange-100 transition">
+          <Link to="/admin/categories" className="flex flex-col items-center gap-2 p-4 bg-[#f8efe3] border border-[#7a1f2b] rounded-lg hover:bg-[#efe1cf] transition">
             <Tag size={24} className="text-orange-600" />
             <span className="text-sm font-medium text-gray-700">Manage Categories</span>
           </Link>
-          <button onClick={fetchDashboardData} className="flex flex-col items-center gap-2 p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition">
-            <TrendingUp size={24} className="text-blue-600" />
+          <Link to="/admin/delivery" className="flex flex-col items-center gap-2 p-4 bg-[#f8efe3] border border-[#7a1f2b] rounded-lg hover:bg-[#efe1cf] transition">
+            <Truck size={24} className="text-blue-600" />
+            <span className="text-sm font-medium text-gray-700">Delivery Portal</span>
+          </Link>
+          <Link to="/admin/delivery-list" className="flex flex-col items-center gap-2 p-4 bg-[#f8efe3] border border-[#7a1f2b] rounded-lg hover:bg-[#efe1cf] transition">
+            <CheckCircle size={24} className="text-indigo-600" />
+            <span className="text-sm font-medium text-gray-700">Delivery List</span>
+          </Link>
+          <button onClick={fetchDashboardData} className="flex flex-col items-center gap-2 p-4 bg-[#f8efe3] border border-[#7a1f2b] rounded-lg hover:bg-[#efe1cf] transition">
+            <TrendingUp size={24} className="text-yellow-600" />
             <span className="text-sm font-medium text-gray-700">Refresh Data</span>
           </button>
         </div>

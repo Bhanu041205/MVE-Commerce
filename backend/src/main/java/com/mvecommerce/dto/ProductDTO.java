@@ -25,4 +25,5 @@ public class ProductDTO {
     private Boolean isActive;
     private BigDecimal rating;
     private Integer reviewCount;
+    private Integer bookingCount;
 }

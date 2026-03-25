@@ -17,4 +17,6 @@ public class OrderItemDTO {
     private Integer quantity;
     private BigDecimal priceAtPurchase;
     private BigDecimal discountApplied;
+    private Boolean canReview;
+    private Long reviewId;
 }

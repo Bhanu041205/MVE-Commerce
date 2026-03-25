@@ -1,6 +1,10 @@
 package com.mvecommerce.config;
 
+import com.mvecommerce.entity.Category;
+import com.mvecommerce.entity.Product;
 import com.mvecommerce.entity.User;
+import com.mvecommerce.repository.CategoryRepository;
+import com.mvecommerce.repository.ProductRepository;
 import com.mvecommerce.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
@@ -10,12 +14,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @Component
 @AllArgsConstructor
 @Slf4j
 public class DataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
     private final PasswordEncoder passwordEncoder;
     private final EntityManager entityManager;
 
@@ -74,6 +83,8 @@ public class DataInitializer implements CommandLineRunner {
                 }
             });
         }
+
+        ensureGrainsCatalog();
     }
 
     private void fixColumnConstraint(String table, String column) {
@@ -85,5 +96,58 @@ public class DataInitializer implements CommandLineRunner {
         } catch (Exception e) {
             log.debug("{}.{} constraint already fixed or column doesn't exist", table, column);
         }
+    }
+
+    private void ensureGrainsCatalog() {
+        Category grainsCategory = categoryRepository.findByNameIgnoreCase("Grains")
+                .orElseGet(() -> {
+                    Category created = Category.builder()
+                            .name("Grains")
+                            .description("Daily essentials including rice, wheat, millets and cereals")
+                            .imageUrl("/sketches/cat-dals.svg")
+                            .isActive(true)
+                            .build();
+                    log.info("Created default category: Grains");
+                    return categoryRepository.save(created);
+                });
+
+        List<ProductSeed> grainProducts = List.of(
+                new ProductSeed("Basmati Rice", "Premium long grain basmati rice, 5kg bag", "/sketches/toor-dal.svg", 12.99, 300),
+                new ProductSeed("Whole Wheat", "Clean whole wheat grains for flour milling, 5kg bag", "/sketches/chana-dal.svg", 8.49, 320),
+                new ProductSeed("Pearl Millet (Bajra)", "Traditional pearl millet high in iron, 1kg", "/sketches/urad-dal.svg", 3.49, 260),
+                new ProductSeed("Finger Millet (Ragi)", "Calcium-rich ragi for healthy meals, 1kg", "/sketches/masoor-dal.svg", 3.79, 250),
+                new ProductSeed("Sorghum (Jowar)", "Wholesome sorghum grain for rotis and porridge, 1kg", "/sketches/toor-dal.svg", 3.69, 240),
+                new ProductSeed("Brown Rice", "Whole grain brown rice rich in fiber, 2kg bag", "/sketches/masoor-dal.svg", 6.99, 260),
+                new ProductSeed("Foxtail Millet", "Gluten-free foxtail millet, 1kg", "/sketches/lobia.svg", 5.49, 210)
+        );
+
+        int added = 0;
+        for (ProductSeed seed : grainProducts) {
+            boolean exists = productRepository.existsByNameAndCategoryId(seed.name, grainsCategory.getId());
+            if (exists) {
+                continue;
+            }
+
+            Product product = Product.builder()
+                    .name(seed.name)
+                    .description(seed.description)
+                    .price(BigDecimal.valueOf(seed.price))
+                    .stock(seed.stock)
+                    .imageUrl(seed.imageUrl)
+                    .discount(BigDecimal.ZERO)
+                    .category(grainsCategory)
+                    .isActive(true)
+                    .build();
+
+            productRepository.save(product);
+            added++;
+        }
+
+        if (added > 0) {
+            log.info("Added {} default grain products", added);
+        }
+    }
+
+    private record ProductSeed(String name, String description, String imageUrl, double price, int stock) {
     }
 }

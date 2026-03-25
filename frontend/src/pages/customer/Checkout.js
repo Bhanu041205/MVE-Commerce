@@ -2,14 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCart } from '../../store/cartSlice';
-import { getCart, getUserAddresses, createAddress, createOrder } from '../../api/endpoints';
+import { getCart, getUserAddresses, createAddress, createOrder, sendPaymentOtp, verifyPaymentOtp } from '../../api/endpoints';
 import { normalizeCartItems } from '../../utils/cartUtils';
 import { storeRecentOrder } from '../../utils/orderStorage';
-import { MapPin, Plus, CreditCard, ArrowLeft, Check } from 'lucide-react';
+import { MapPin, Plus, CreditCard, ArrowLeft, Check, Truck } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Spinner from '../../components/Spinner';
 
 const PLACEHOLDER_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23e5e7eb'/%3E%3Ctext x='150' y='150' dominant-baseline='middle' text-anchor='middle' fill='%239ca3af' font-family='Arial,sans-serif' font-size='16'%3ENo Image%3C/text%3E%3C/svg%3E";
+const PAYMENT_METHODS = [
+  { value: 'COD', label: 'Cash On Delivery', helper: 'Pay when package arrives' },
+  { value: 'CARD', label: 'Credit / Debit Card', helper: 'Card payment confirmed at checkout' },
+  { value: 'UPI', label: 'UPI', helper: 'Fast payment using UPI apps' },
+  { value: 'NET_BANKING', label: 'Net Banking', helper: 'Pay from your bank account' },
+  { value: 'WALLET', label: 'Wallet', helper: 'Use digital wallet balance' }
+];
+const TRANSPORT_MODES = [
+  { value: 'STANDARD', label: 'Standard Transport', helper: 'Economical delivery in 3-5 days' },
+  { value: 'EXPRESS', label: 'Express Transport', helper: 'Priority handling in 1-2 days' },
+  { value: 'PICKUP', label: 'Store Pickup', helper: 'Collect from nearest pickup point' }
+];
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -23,8 +35,40 @@ const Checkout = () => {
   const [placing, setPlacing] = useState(false);
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [orderNotes, setOrderNotes] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('COD');
+  const [paymentDetails, setPaymentDetails] = useState({
+    cardHolderName: '',
+    cardNumber: '',
+    cardExpiry: '',
+    cardCvv: '',
+    cardMobile: '',
+    saveCard: false,
+    cardAlias: '',
+    upiId: '',
+    upiMobile: '',
+    upiPin: '',
+    bankName: '',
+    accountHolder: '',
+    accountNumber: '',
+    ifscCode: '',
+    netBankingMobile: '',
+    walletProvider: '',
+    walletMobile: '',
+    walletPin: ''
+  });
+  const [transportMode, setTransportMode] = useState('STANDARD');
+  const [transportDetails, setTransportDetails] = useState('');
   const [step, setStep] = useState(1); // 1: Address, 2: Review, 3: Success
+  const [reviewStage, setReviewStage] = useState('review'); // review -> payment -> confirm
   const [createdOrder, setCreatedOrder] = useState(null);
+  const [paymentVerification, setPaymentVerification] = useState({
+    otpSent: false,
+    otp: '',
+    verified: false,
+    sentTo: '',
+    otpLoading: false,
+    verifyLoading: false
+  });
 
   const [addressForm, setAddressForm] = useState({
     addressLine1: '',
@@ -92,6 +136,18 @@ const Checkout = () => {
       toast.error('Please select a shipping address');
       return;
     }
+
+    const validationError = validatePaymentDetails();
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+
+    if (paymentMethod !== 'COD' && !paymentVerification.verified) {
+      toast.error('Please complete OTP verification before placing the order');
+      return;
+    }
+
     setPlacing(true);
     try {
       const orderItems = cartItems.map(item => ({
@@ -103,12 +159,23 @@ const Checkout = () => {
       const response = await createOrder({
         shippingAddressId: selectedAddressId,
         items: orderItems,
-        notes: orderNotes.trim() || null
+        notes: orderNotes.trim() || null,
+        paymentMethod,
+        paymentDetails: buildPaymentDetailsSummary(),
+        transportMode,
+        transportDetails: transportDetails.trim() || null
       });
 
       setCreatedOrder(response.data);
       storeRecentOrder(user?.id || user?.email, response.data);
       dispatch(setCart([]));
+      setOrderNotes('');
+      setPaymentMethod('COD');
+      clearSensitivePaymentData(); // Clear sensitive payment information
+      setTransportMode('STANDARD');
+      setTransportDetails('');
+      setReviewStage('review');
+      resetVerification();
       toast.success('Order placed successfully!');
       navigate('/orders');
     } catch (error) {
@@ -123,6 +190,223 @@ const Checkout = () => {
   const tax = subtotal * 0.1;
   const shipping = subtotal > 100 ? 0 : 10;
   const total = subtotal + tax + shipping;
+
+  const digitsOnly = (value) => String(value || '').replace(/\D/g, '');
+
+  const maskRight = (value, keep = 4) => {
+    const plain = String(value || '');
+    if (!plain) return '';
+    const visible = plain.slice(-keep);
+    return `${'*'.repeat(Math.max(0, plain.length - keep))}${visible}`;
+  };
+
+  const normalizeCardExpiry = (value) => {
+    const raw = String(value || '').trim();
+    if (!raw) return '';
+
+    // Already in slash format, keep as-is.
+    if (raw.includes('/')) return raw;
+
+    const digits = raw.replace(/\D/g, '');
+    if (digits.length === 3) {
+      // Example: 207 -> 02/07
+      return `0${digits[0]}/${digits.slice(1)}`;
+    }
+
+    if (digits.length === 4) {
+      const firstTwo = Number(digits.slice(0, 2));
+      // Prefer MMYY when possible, otherwise fallback to YYMM interpretation.
+      if (firstTwo >= 1 && firstTwo <= 12) {
+        return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+      }
+      return `${digits.slice(2)}/${digits.slice(0, 2)}`;
+    }
+
+    return raw;
+  };
+
+  const validatePaymentDetails = () => {
+    if (paymentMethod === 'CARD') {
+      const cardNumber = digitsOnly(paymentDetails.cardNumber);
+      const cvv = digitsOnly(paymentDetails.cardCvv);
+      const expiryValue = normalizeCardExpiry(paymentDetails.cardExpiry);
+      const isMmYy = /^(0[1-9]|1[0-2])\/[0-9]{2}$/.test(expiryValue);
+      const isYyMm = /^[0-9]{2}\/(0[1-9]|1[0-2])$/.test(expiryValue);
+      if (!paymentDetails.cardHolderName.trim()) return 'Card holder name is required';
+      if (cardNumber.length < 12 || cardNumber.length > 19) return 'Enter a valid card number';
+      if (!isMmYy && !isYyMm) return 'Card expiry must be valid (examples: 09/24, 24/09, 0924, 207)';
+      if (cvv.length < 3 || cvv.length > 4) return 'Enter a valid CVV';
+      if (digitsOnly(paymentDetails.cardMobile).length !== 10) return 'Enter a valid 10-digit mobile number for card OTP';
+    }
+
+    if (paymentMethod === 'UPI') {
+      if (digitsOnly(paymentDetails.upiMobile).length !== 10) return 'Enter a valid 10-digit mobile number for UPI';
+      if (!/^[a-zA-Z0-9._-]{2,}@[a-zA-Z]{2,}$/.test(paymentDetails.upiId.trim())) {
+        return 'Enter a valid UPI ID';
+      }
+      if (digitsOnly(paymentDetails.upiPin).length < 4) return 'UPI PIN must be at least 4 digits';
+    }
+
+    if (paymentMethod === 'NET_BANKING') {
+      if (!paymentDetails.bankName.trim()) return 'Bank name is required for Net Banking';
+      if (!paymentDetails.accountHolder.trim()) return 'Account holder name is required for Net Banking';
+      if (digitsOnly(paymentDetails.accountNumber).length < 8) return 'Enter a valid account number';
+      if (!/^[A-Za-z]{4}0[A-Za-z0-9]{6}$/.test(paymentDetails.ifscCode.trim())) return 'Enter a valid IFSC code';
+      if (digitsOnly(paymentDetails.netBankingMobile).length !== 10) return 'Enter a valid 10-digit mobile number for Net Banking OTP';
+    }
+
+    if (paymentMethod === 'WALLET') {
+      if (!paymentDetails.walletProvider.trim()) return 'Wallet provider is required';
+      if (digitsOnly(paymentDetails.walletMobile).length !== 10) return 'Enter a valid 10-digit wallet mobile number';
+      if (digitsOnly(paymentDetails.walletPin).length < 4) return 'Wallet PIN must be at least 4 digits';
+    }
+
+    return null;
+  };
+
+  const buildPaymentDetailsSummary = () => {
+    if (paymentMethod === 'COD') {
+      return 'Cash on Delivery';
+    }
+
+    if (paymentMethod === 'CARD') {
+      const cardNumber = digitsOnly(paymentDetails.cardNumber);
+      const last4 = cardNumber.slice(-4);
+      const normalizedExpiry = normalizeCardExpiry(paymentDetails.cardExpiry);
+      return `CARD | Holder: ${paymentDetails.cardHolderName.trim()} | Last4: ${last4} | Exp: ${normalizedExpiry} | OTP Verified`;
+    }
+
+    if (paymentMethod === 'UPI') {
+      return `UPI | ID: ${paymentDetails.upiId.trim()} | Mobile: ${maskRight(digitsOnly(paymentDetails.upiMobile), 4)} | OTP Verified`;
+    }
+
+    if (paymentMethod === 'NET_BANKING') {
+      return `NET_BANKING | Bank: ${paymentDetails.bankName.trim()} | Holder: ${paymentDetails.accountHolder.trim()} | OTP Verified`;
+    }
+
+    if (paymentMethod === 'WALLET') {
+      return `WALLET | Provider: ${paymentDetails.walletProvider.trim()} | Mobile: ${maskRight(digitsOnly(paymentDetails.walletMobile), 4)} | OTP Verified`;
+    }
+
+    return null;
+  };
+
+  const getOtpDestination = () => {
+    if (paymentMethod === 'CARD') return digitsOnly(paymentDetails.cardMobile);
+    if (paymentMethod === 'UPI') return digitsOnly(paymentDetails.upiMobile);
+    if (paymentMethod === 'NET_BANKING') return digitsOnly(paymentDetails.netBankingMobile);
+    if (paymentMethod === 'WALLET') return digitsOnly(paymentDetails.walletMobile);
+    return '';
+  };
+
+  const resetVerification = () => {
+    setPaymentVerification({
+      otpSent: false,
+      otp: '',
+      verified: false,
+      sentTo: '',
+      otpLoading: false,
+      verifyLoading: false
+    });
+  };
+
+  const clearSensitivePaymentData = () => {
+    // Clear sensitive payment information after use
+    setPaymentDetails({
+      cardHolderName: '',
+      cardNumber: '',
+      cardExpiry: '',
+      cardCvv: '',
+      cardMobile: '',
+      saveCard: false,
+      cardAlias: '',
+      upiId: '',
+      upiMobile: '',
+      upiPin: '', // PIN cleared
+      bankName: '',
+      accountHolder: '',
+      accountNumber: '',
+      ifscCode: '',
+      netBankingMobile: '',
+      walletProvider: '',
+      walletMobile: '',
+      walletPin: '' // PIN cleared
+    });
+  };
+
+  const handleSendOtp = async () => {
+    const validationError = validatePaymentDetails();
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+
+    const destination = getOtpDestination();
+    if (!destination || destination.length !== 10) {
+      toast.error('Please enter a valid 10-digit mobile number for OTP');
+      return;
+    }
+
+    setPaymentVerification((prev) => ({ ...prev, otpLoading: true }));
+    try {
+      const response = await sendPaymentOtp(destination, paymentMethod);
+      setPaymentVerification((prev) => ({
+        ...prev,
+        otpSent: true,
+        sentTo: destination,
+        verified: false,
+        otp: '',
+        otpLoading: false
+      }));
+      const debugOtp = response?.data?.debugOtp;
+      if (debugOtp) {
+        toast.success(`OTP sent to ${maskRight(destination, 4)}. Debug OTP: ${debugOtp}`, { duration: 5 });
+      } else {
+        toast.success(`OTP sent to ${maskRight(destination, 4)}`);
+      }
+    } catch (error) {
+      setPaymentVerification((prev) => ({ ...prev, otpLoading: false }));
+      const errorMsg = error.response?.data?.message || error.message || 'Failed to send OTP';
+      toast.error(`OTP Send Failed: ${errorMsg}`);
+      console.error('OTP Send Error:', error);
+    }
+  };
+
+  const handleVerifyPayment = async () => {
+    if (!paymentVerification.otpSent) {
+      toast.error('Please request OTP first');
+      return;
+    }
+
+    const otpValue = digitsOnly(paymentVerification.otp);
+
+    if (otpValue.length !== 6) {
+      toast.error('OTP must be exactly 6 digits');
+      return;
+    }
+
+    if (!paymentVerification.sentTo || paymentVerification.sentTo.length !== 10) {
+      toast.error('Invalid mobile number for verification');
+      return;
+    }
+
+    setPaymentVerification((prev) => ({ ...prev, verifyLoading: true }));
+    try {
+      await verifyPaymentOtp(
+        paymentVerification.sentTo,
+        paymentMethod,
+        otpValue
+      );
+      setPaymentVerification((prev) => ({ ...prev, verified: true, verifyLoading: false }));
+      toast.success('Payment verification completed successfully!');
+      setReviewStage('confirm');
+    } catch (error) {
+      setPaymentVerification((prev) => ({ ...prev, verifyLoading: false }));
+      const errorMsg = error.response?.data?.message || error.message || 'Failed to verify OTP';
+      toast.error(`Verification Failed: ${errorMsg}`);
+      console.error('OTP Verify Error:', error);
+    }
+  };
 
   if (loading) return <div className="flex justify-center items-center h-96"><Spinner /></div>;
 
@@ -328,6 +612,7 @@ const Checkout = () => {
                       toast.error('Please select a shipping address');
                       return;
                     }
+                    setReviewStage('review');
                     setStep(2);
                   }}
                   disabled={!selectedAddressId}
@@ -341,6 +626,46 @@ const Checkout = () => {
             {/* Step 2: Review & Pay */}
             {step === 2 && (
               <div className="space-y-6">
+                <div className="bg-white rounded-xl shadow-lg p-4">
+                  <div className="flex flex-wrap gap-3 items-center justify-between">
+                    <h2 className="text-lg font-bold text-gray-900">Review and Payment</h2>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setReviewStage('review')}
+                        className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
+                          reviewStage === 'review' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
+                      >
+                        Review Order
+                      </button>
+                      <button
+                        onClick={() => setReviewStage('payment')}
+                        className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
+                          reviewStage === 'payment' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
+                      >
+                        Payment Details
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (paymentMethod === 'COD' || paymentVerification.verified) {
+                            setReviewStage('confirm');
+                          }
+                        }}
+                        className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
+                          reviewStage === 'confirm'
+                            ? 'bg-green-600 text-white'
+                            : (paymentMethod === 'COD' || paymentVerification.verified)
+                              ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                              : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                        }`}
+                      >
+                        Place Order
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Shipping Address */}
                 <div className="bg-white rounded-xl shadow-lg p-6">
                   <div className="flex justify-between items-center mb-3">
@@ -364,57 +689,456 @@ const Checkout = () => {
                   })()}
                 </div>
 
-                {/* Order Items */}
-                <div className="bg-white rounded-xl shadow-lg p-6">
-                  <h2 className="text-lg font-bold mb-4">Order Items ({cartItems.length})</h2>
-                  <div className="divide-y divide-gray-200">
-                    {cartItems.map((item) => (
-                      <div key={item.id} className="flex gap-4 py-3">
-                        <img
-                          src={item.product?.imageUrl || PLACEHOLDER_IMG}
-                          alt={item.product?.name}
-                          className="w-16 h-16 rounded-lg object-cover"
-                          onError={(e) => { e.target.src = PLACEHOLDER_IMG; }}
-                        />
-                        <div className="flex-1">
-                          <p className="font-semibold text-gray-900">{item.product?.name}</p>
-                          <p className="text-sm text-gray-500">Qty: {item.quantity} × ${item.product?.price?.toFixed(2)}</p>
-                        </div>
-                        <p className="font-bold text-gray-900">${(item.product?.price * item.quantity).toFixed(2)}</p>
+                {reviewStage === 'review' && (
+                  <>
+                    <div className="bg-white rounded-xl shadow-lg p-6">
+                      <h2 className="text-lg font-bold mb-4">Order Items ({cartItems.length})</h2>
+                      <div className="divide-y divide-gray-200">
+                        {cartItems.map((item) => (
+                          <div key={item.id} className="flex gap-4 py-3">
+                            <img
+                              src={item.product?.imageUrl || PLACEHOLDER_IMG}
+                              alt={item.product?.name}
+                              className="w-16 h-16 rounded-lg object-cover"
+                              onError={(e) => { e.target.src = PLACEHOLDER_IMG; }}
+                            />
+                            <div className="flex-1">
+                              <p className="font-semibold text-gray-900">{item.product?.name}</p>
+                              <p className="text-sm text-gray-500">Qty: {item.quantity} × ${item.product?.price?.toFixed(2)}</p>
+                            </div>
+                            <p className="font-bold text-gray-900">${(item.product?.price * item.quantity).toFixed(2)}</p>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </div>
+                    </div>
 
-                {/* Notes */}
-                <div className="bg-white rounded-xl shadow-lg p-6">
-                  <h2 className="text-lg font-bold mb-3">Order Notes (Optional)</h2>
-                  <textarea
-                    value={orderNotes}
-                    onChange={(e) => setOrderNotes(e.target.value)}
-                    placeholder="Any special instructions for your order..."
-                    rows="3"
-                    className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
-                  />
-                </div>
+                    <div className="bg-white rounded-xl shadow-lg p-6">
+                      <h2 className="text-lg font-bold mb-3">Payable Amount</h2>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between text-gray-600">
+                          <span>Subtotal</span>
+                          <span>${subtotal.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between text-gray-600">
+                          <span>Tax</span>
+                          <span>${tax.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between text-gray-600">
+                          <span>Shipping</span>
+                          <span>{shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}</span>
+                        </div>
+                        <div className="pt-2 border-t flex justify-between text-lg font-bold text-gray-900">
+                          <span>Total</span>
+                          <span className="text-green-600">${total.toFixed(2)}</span>
+                        </div>
+                      </div>
+                    </div>
 
-                {/* Place Order */}
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => setStep(1)}
-                    className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-bold hover:bg-gray-50 transition"
-                  >
-                    Back
-                  </button>
-                  <button
-                    onClick={handlePlaceOrder}
-                    disabled={placing}
-                    className="flex-1 flex items-center justify-center gap-2 bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 disabled:bg-gray-400 transition"
-                  >
-                    <CreditCard size={20} />
-                    {placing ? 'Placing Order...' : `Place Order - $${total.toFixed(2)}`}
-                  </button>
-                </div>
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => setStep(1)}
+                        className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-bold hover:bg-gray-50 transition"
+                      >
+                        Back
+                      </button>
+                      <button
+                        onClick={() => setReviewStage('payment')}
+                        className="flex-1 bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition"
+                      >
+                        Continue to Payment
+                      </button>
+                    </div>
+                  </>
+                )}
+
+                {reviewStage === 'payment' && (
+                  <>
+                    <div className="bg-white rounded-xl shadow-lg p-6">
+                      <h2 className="text-lg font-bold mb-3 flex items-center gap-2">
+                        <CreditCard size={20} className="text-green-600" /> Payment Method
+                      </h2>
+
+                      <div className="mb-4 p-3 rounded-lg bg-gray-50 border border-gray-200 text-sm text-gray-700">
+                        <p className="font-semibold text-gray-900">Billing and shipping address</p>
+                        {(() => {
+                          const addr = addresses.find((a) => a.id === selectedAddressId);
+                          if (!addr) return <p className="text-gray-500 mt-1">No address selected</p>;
+                          return <p className="mt-1">{addr.addressLine1}, {addr.city}, {addr.state} {addr.postalCode}, {addr.country}</p>;
+                        })()}
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {PAYMENT_METHODS.map((method) => (
+                          <label
+                            key={method.value}
+                            className={`border-2 rounded-lg p-3 cursor-pointer transition ${
+                              paymentMethod === method.value ? 'border-green-600 bg-green-50' : 'border-gray-200 hover:border-gray-400'
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name="paymentMethod"
+                              value={method.value}
+                              checked={paymentMethod === method.value}
+                              onChange={(e) => {
+                                setPaymentMethod(e.target.value);
+                                resetVerification();
+                              }}
+                              className="mr-2"
+                            />
+                            <span className="font-semibold text-gray-900">{method.label}</span>
+                            <p className="text-xs text-gray-600 mt-1 ml-6">{method.helper}</p>
+                          </label>
+                        ))}
+                      </div>
+
+                      <div className="mt-4 border-t pt-4">
+                        {paymentMethod === 'CARD' && (
+                          <div className="space-y-3">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              <input
+                                type="text"
+                                placeholder="Card Holder Name *"
+                                value={paymentDetails.cardHolderName}
+                                onChange={(e) => {
+                                  setPaymentDetails((prev) => ({ ...prev, cardHolderName: e.target.value }));
+                                  resetVerification();
+                                }}
+                                className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                              />
+                              <input
+                                type="text"
+                                inputMode="numeric"
+                                placeholder="Card Number *"
+                                value={paymentDetails.cardNumber}
+                                onChange={(e) => {
+                                  setPaymentDetails((prev) => ({ ...prev, cardNumber: e.target.value }));
+                                  resetVerification();
+                                }}
+                                className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                              />
+                              <input
+                                type="text"
+                                placeholder="Expiry (MM/YY) *"
+                                value={paymentDetails.cardExpiry}
+                                onChange={(e) => {
+                                  setPaymentDetails((prev) => ({ ...prev, cardExpiry: e.target.value }));
+                                  resetVerification();
+                                }}
+                                className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                              />
+                              <input
+                                type="password"
+                                inputMode="numeric"
+                                placeholder="CVV *"
+                                value={paymentDetails.cardCvv}
+                                onChange={(e) => {
+                                  setPaymentDetails((prev) => ({ ...prev, cardCvv: e.target.value }));
+                                  resetVerification();
+                                }}
+                                className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                              />
+                              <input
+                                type="tel"
+                                placeholder="Mobile Number for OTP *"
+                                value={paymentDetails.cardMobile}
+                                onChange={(e) => {
+                                  setPaymentDetails((prev) => ({ ...prev, cardMobile: e.target.value }));
+                                  resetVerification();
+                                }}
+                                className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                              />
+                              <input
+                                type="text"
+                                placeholder="Save as card nickname (optional)"
+                                value={paymentDetails.cardAlias}
+                                onChange={(e) => setPaymentDetails((prev) => ({ ...prev, cardAlias: e.target.value }))}
+                                className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                              />
+                            </div>
+                            <div className="flex items-center justify-between rounded-lg border border-gray-200 p-3 text-sm">
+                              <span className="text-gray-700">Save this as a new card for faster checkout</span>
+                              <input
+                                type="checkbox"
+                                checked={paymentDetails.saveCard}
+                                onChange={(e) => setPaymentDetails((prev) => ({ ...prev, saveCard: e.target.checked }))}
+                                className="rounded text-green-600"
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        {paymentMethod === 'UPI' && (
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <input
+                              type="tel"
+                              placeholder="UPI Mobile Number *"
+                              value={paymentDetails.upiMobile}
+                              onChange={(e) => {
+                                setPaymentDetails((prev) => ({ ...prev, upiMobile: e.target.value }));
+                                resetVerification();
+                              }}
+                              className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                            />
+                            <input
+                              type="text"
+                              placeholder="UPI ID (example@bank) *"
+                              value={paymentDetails.upiId}
+                              onChange={(e) => {
+                                setPaymentDetails((prev) => ({ ...prev, upiId: e.target.value }));
+                                resetVerification();
+                              }}
+                              className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                            />
+                            <input
+                              type="password"
+                              inputMode="numeric"
+                              placeholder="UPI PIN *"
+                              value={paymentDetails.upiPin}
+                              onChange={(e) => {
+                                setPaymentDetails((prev) => ({ ...prev, upiPin: e.target.value }));
+                                resetVerification();
+                              }}
+                              className="md:col-span-2 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                            />
+                          </div>
+                        )}
+
+                        {paymentMethod === 'NET_BANKING' && (
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <input
+                              type="text"
+                              placeholder="Bank Name *"
+                              value={paymentDetails.bankName}
+                              onChange={(e) => {
+                                setPaymentDetails((prev) => ({ ...prev, bankName: e.target.value }));
+                                resetVerification();
+                              }}
+                              className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                            />
+                            <input
+                              type="text"
+                              placeholder="Account Holder Name *"
+                              value={paymentDetails.accountHolder}
+                              onChange={(e) => {
+                                setPaymentDetails((prev) => ({ ...prev, accountHolder: e.target.value }));
+                                resetVerification();
+                              }}
+                              className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                            />
+                            <input
+                              type="text"
+                              inputMode="numeric"
+                              placeholder="Account Number *"
+                              value={paymentDetails.accountNumber}
+                              onChange={(e) => {
+                                setPaymentDetails((prev) => ({ ...prev, accountNumber: e.target.value }));
+                                resetVerification();
+                              }}
+                              className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                            />
+                            <input
+                              type="text"
+                              placeholder="IFSC Code *"
+                              value={paymentDetails.ifscCode}
+                              onChange={(e) => {
+                                setPaymentDetails((prev) => ({ ...prev, ifscCode: e.target.value.toUpperCase() }));
+                                resetVerification();
+                              }}
+                              className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                            />
+                            <input
+                              type="tel"
+                              placeholder="Registered Mobile Number *"
+                              value={paymentDetails.netBankingMobile}
+                              onChange={(e) => {
+                                setPaymentDetails((prev) => ({ ...prev, netBankingMobile: e.target.value }));
+                                resetVerification();
+                              }}
+                              className="md:col-span-2 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                            />
+                          </div>
+                        )}
+
+                        {paymentMethod === 'WALLET' && (
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <input
+                              type="text"
+                              placeholder="Wallet Provider (Paytm, PhonePe, etc.) *"
+                              value={paymentDetails.walletProvider}
+                              onChange={(e) => {
+                                setPaymentDetails((prev) => ({ ...prev, walletProvider: e.target.value }));
+                                resetVerification();
+                              }}
+                              className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                            />
+                            <input
+                              type="tel"
+                              placeholder="Wallet Mobile Number *"
+                              value={paymentDetails.walletMobile}
+                              onChange={(e) => {
+                                setPaymentDetails((prev) => ({ ...prev, walletMobile: e.target.value }));
+                                resetVerification();
+                              }}
+                              className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                            />
+                            <input
+                              type="password"
+                              placeholder="Wallet PIN *"
+                              value={paymentDetails.walletPin}
+                              onChange={(e) => {
+                                setPaymentDetails((prev) => ({ ...prev, walletPin: e.target.value }));
+                                resetVerification();
+                              }}
+                              className="md:col-span-2 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                            />
+                          </div>
+                        )}
+
+                        {paymentMethod === 'COD' && (
+                          <p className="text-sm text-gray-600">No additional payment details are required for Cash on Delivery. You can place the order directly.</p>
+                        )}
+                      </div>
+
+                      {paymentMethod !== 'COD' && (
+                        <div className="mt-4 border-t pt-4 space-y-3">
+                          <h3 className="font-semibold text-gray-900">OTP verification</h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <input
+                              type="text"
+                              inputMode="numeric"
+                              placeholder="OTP (6 digits)"
+                              value={paymentVerification.otp}
+                              onChange={(e) => setPaymentVerification((prev) => ({ ...prev, otp: e.target.value, verified: false }))}
+                              className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                            />
+                          </div>
+                          <div className="flex flex-wrap gap-3">
+                            <button
+                              type="button"
+                              onClick={handleSendOtp}
+                              disabled={paymentVerification.otpLoading}
+                              className="px-4 py-2 rounded-lg border border-green-600 text-green-700 font-semibold hover:bg-green-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                            >
+                              {paymentVerification.otpLoading ? 'Sending OTP...' : (paymentVerification.otpSent ? 'Resend OTP' : 'Send OTP')}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleVerifyPayment}
+                              disabled={paymentVerification.verifyLoading || !paymentVerification.otpSent}
+                              className="px-4 py-2 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                            >
+                              {paymentVerification.verifyLoading ? 'Verifying...' : 'Verify Payment'}
+                            </button>
+                          </div>
+                          {paymentVerification.otpSent && (
+                            <p className="text-xs text-gray-600">OTP sent to {maskRight(paymentVerification.sentTo, 4)}.</p>
+                          )}
+                          {paymentVerification.verified && (
+                            <p className="text-sm text-green-700 font-semibold">Verification complete. You can place your order.</p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="bg-white rounded-xl shadow-lg p-6">
+                      <h2 className="text-lg font-bold mb-3 flex items-center gap-2">
+                        <Truck size={20} className="text-green-600" /> Transport Facility
+                      </h2>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+                        {TRANSPORT_MODES.map((mode) => (
+                          <label
+                            key={mode.value}
+                            className={`border-2 rounded-lg p-3 cursor-pointer transition ${
+                              transportMode === mode.value ? 'border-green-600 bg-green-50' : 'border-gray-200 hover:border-gray-400'
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name="transportMode"
+                              value={mode.value}
+                              checked={transportMode === mode.value}
+                              onChange={(e) => setTransportMode(e.target.value)}
+                              className="mr-2"
+                            />
+                            <span className="font-semibold text-gray-900">{mode.label}</span>
+                            <p className="text-xs text-gray-600 mt-1 ml-6">{mode.helper}</p>
+                          </label>
+                        ))}
+                      </div>
+                      <textarea
+                        value={transportDetails}
+                        onChange={(e) => setTransportDetails(e.target.value)}
+                        placeholder="Transport details (landmark, gate timing, preferred pickup slot, etc.)"
+                        rows="2"
+                        className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                      />
+                    </div>
+
+                    <div className="bg-white rounded-xl shadow-lg p-6">
+                      <h2 className="text-lg font-bold mb-3">Order Notes (Optional)</h2>
+                      <textarea
+                        value={orderNotes}
+                        onChange={(e) => setOrderNotes(e.target.value)}
+                        placeholder="Any special instructions for your order..."
+                        rows="3"
+                        className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600 focus:outline-none"
+                      />
+                    </div>
+
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => setReviewStage('review')}
+                        className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-bold hover:bg-gray-50 transition"
+                      >
+                        Back to Review
+                      </button>
+                      <button
+                        onClick={() => setReviewStage('confirm')}
+                        disabled={paymentMethod !== 'COD' && !paymentVerification.verified}
+                        className="flex-1 flex items-center justify-center gap-2 bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 disabled:bg-gray-400 transition"
+                      >
+                        <CreditCard size={20} />
+                        Continue to Place Order
+                      </button>
+                    </div>
+                  </>
+                )}
+
+                {reviewStage === 'confirm' && (
+                  <>
+                    <div className="bg-white rounded-xl shadow-lg p-6">
+                      <h2 className="text-lg font-bold mb-3">Final Confirmation</h2>
+                      <div className="space-y-2 text-sm text-gray-700">
+                        <p><span className="font-semibold text-gray-900">Payment Method:</span> {PAYMENT_METHODS.find((m) => m.value === paymentMethod)?.label || paymentMethod}</p>
+                        <p><span className="font-semibold text-gray-900">Verification:</span> {paymentMethod === 'COD' ? 'Not required for COD' : (paymentVerification.verified ? 'OTP verified' : 'Pending')}</p>
+                        <p><span className="font-semibold text-gray-900">Transport:</span> {TRANSPORT_MODES.find((m) => m.value === transportMode)?.label || transportMode}</p>
+                        {orderNotes?.trim() && <p><span className="font-semibold text-gray-900">Order Notes:</span> {orderNotes.trim()}</p>}
+                      </div>
+                      <div className="mt-4 pt-4 border-t flex justify-between text-lg font-bold text-gray-900">
+                        <span>Total Payable</span>
+                        <span className="text-green-600">${total.toFixed(2)}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => setReviewStage('payment')}
+                        className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-bold hover:bg-gray-50 transition"
+                      >
+                        Back to Payment
+                      </button>
+                      <button
+                        onClick={handlePlaceOrder}
+                        disabled={placing || (paymentMethod !== 'COD' && !paymentVerification.verified)}
+                        className="flex-1 flex items-center justify-center gap-2 bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 disabled:bg-gray-400 transition"
+                      >
+                        <CreditCard size={20} />
+                        {placing ? 'Placing Order...' : `Place Order - $${total.toFixed(2)}`}
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             )}
           </div>

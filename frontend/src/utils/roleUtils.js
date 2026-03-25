@@ -5,3 +5,7 @@ export const hasRole = (user, requiredRole) => normalizeRole(user?.role) === nor
 export const isAdminUser = (user) => hasRole(user, 'ADMIN');
 
 export const isCustomerUser = (user) => hasRole(user, 'CUSTOMER');
+
+export const isSellerUser = (user) => hasRole(user, 'SELLER');
+
+export const isAdminOrSeller = (user) => isAdminUser(user) || isSellerUser(user);

@@ -50,6 +50,38 @@ public class Order {
     @Column(precision = 10, scale = 2)
     private BigDecimal shippingAmount = BigDecimal.ZERO;
 
+    @Enumerated(EnumType.STRING)
+    @Column
+    private PaymentMethod paymentMethod;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private PaymentStatus paymentStatus;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private TransportMode transportMode;
+
+    @Column(columnDefinition = "TEXT")
+    private String paymentDetails;
+
+    private String transportProvider;
+
+    private String transportTrackingId;
+
+    private String transportContactNumber;
+
+    @Column(columnDefinition = "TEXT")
+    private String transportDetails;
+
+    private LocalDateTime cancelledAt;
+
+    @Enumerated(EnumType.STRING)
+    private CancellationStage cancellationStage;
+
+    @Column(columnDefinition = "TEXT")
+    private String cancellationReason;
+
     @Column(columnDefinition = "TEXT")
     private String notes;
 
@@ -74,5 +106,21 @@ public class Order {
 
     public enum OrderStatus {
         PENDING, CONFIRMED, PROCESSING, SHIPPED, OUT_FOR_DELIVERY, DELIVERED, CANCELLED, RETURNED
+    }
+
+    public enum PaymentMethod {
+        COD, CARD, UPI, NET_BANKING, WALLET
+    }
+
+    public enum PaymentStatus {
+        PENDING, PAID, FAILED, REFUND_PENDING, REFUNDED
+    }
+
+    public enum TransportMode {
+        STANDARD, EXPRESS, PICKUP
+    }
+
+    public enum CancellationStage {
+        BEFORE_PAYMENT, AFTER_PAYMENT
     }
 }

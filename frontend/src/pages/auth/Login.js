@@ -161,14 +161,14 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-500 via-green-50 to-blue-50 flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-[#d8d5cf] flex items-center justify-center py-12 px-4">
       <div className="w-full max-w-md">
         {/* Header Section */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-600 rounded-full mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#7a1f2b] rounded-full mb-4">
             <span className="text-2xl font-bold text-white">🛍️</span>
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">MVE Commerce</h1>
+          <h1 className="brand-mark text-4xl font-bold mb-2">MANDOVA...</h1>
           <p className="text-gray-600">Welcome back! Login to your account</p>
         </div>
 

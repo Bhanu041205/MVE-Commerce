@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCart } from '../../store/cartSlice';
-import { ArrowRight, Truck, Shield, RotateCcw, ShoppingCart, Star } from 'lucide-react';
+import { ArrowRight, Truck, Shield, RotateCcw, ShoppingCart, Star, Search } from 'lucide-react';
 import { getAllProducts, getAllCategories, addToCart, getCart } from '../../api/endpoints';
 import { normalizeCartItems } from '../../utils/cartUtils';
 import toast from 'react-hot-toast';
@@ -16,6 +16,8 @@ const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [addingToCart, setAddingToCart] = useState(null);
+  const [categorySearchTerm, setCategorySearchTerm] = useState('');
+  const [productSearchTerm, setProductSearchTerm] = useState('');
 
   const isCustomerUser = () => {
     const role = String(user?.role || '').trim().toUpperCase();
@@ -69,12 +71,25 @@ const Home = () => {
     }
   };
 
+  const filteredCategories = categories.filter((category) =>
+    String(category.name || '').toLowerCase().includes(categorySearchTerm.trim().toLowerCase())
+  );
+
+  const filteredFeaturedProducts = featuredProducts.filter((product) => {
+    const q = productSearchTerm.trim().toLowerCase();
+    if (!q) return true;
+    return (
+      String(product.name || '').toLowerCase().includes(q) ||
+      String(product.description || '').toLowerCase().includes(q)
+    );
+  });
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#d8d5cf]">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-green-600 to-blue-600 text-white py-24">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">Welcome to MVE Commerce</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">Welcome to <span className="brand-mark brand-mark-hero">MANDOVA...</span></h1>
           <p className="text-xl md:text-2xl mb-8 opacity-90">Shop quality products from trusted vendors at best prices</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -132,9 +147,19 @@ const Home = () => {
         <section className="py-16">
           <div className="max-w-7xl mx-auto px-4">
             <h2 className="text-4xl font-bold mb-12">Browse Categories</h2>
+            <div className="relative max-w-md mb-6">
+              <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                value={categorySearchTerm}
+                onChange={(e) => setCategorySearchTerm(e.target.value)}
+                placeholder="Search categories"
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+              />
+            </div>
             
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {categories.map((category) => (
+              {filteredCategories.map((category) => (
                 <Link
                   key={category.id}
                   to={`/products?category=${category.id}`}
@@ -166,8 +191,19 @@ const Home = () => {
               </Link>
             </div>
 
+            <div className="relative max-w-md mb-6">
+              <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                value={productSearchTerm}
+                onChange={(e) => setProductSearchTerm(e.target.value)}
+                placeholder="Search featured products"
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+              />
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredProducts.map((product) => (
+              {filteredFeaturedProducts.map((product) => (
                 <div
                   key={product.id}
                   className="bg-white rounded-lg shadow-md hover:shadow-xl transition overflow-hidden group"

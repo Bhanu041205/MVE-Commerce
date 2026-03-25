@@ -5,6 +5,7 @@ import com.mvecommerce.entity.Category;
 import com.mvecommerce.entity.Product;
 import com.mvecommerce.exception.ResourceNotFoundException;
 import com.mvecommerce.repository.CategoryRepository;
+import com.mvecommerce.repository.OrderItemRepository;
 import com.mvecommerce.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -23,6 +24,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OrderItemRepository orderItemRepository;
     private final ModelMapper modelMapper;
 
     // Customer Methods
@@ -138,6 +140,8 @@ public class ProductService {
             dto.setCategoryId(product.getCategory().getId());
             dto.setCategoryName(product.getCategory().getName());
         }
+        Number bookedQty = orderItemRepository.getBookedQuantityByProductId(product.getId());
+        dto.setBookingCount(bookedQty != null ? bookedQty.intValue() : 0);
         return dto;
     }
 }

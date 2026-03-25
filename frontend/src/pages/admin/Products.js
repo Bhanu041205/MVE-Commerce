@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { getAdminAllProducts, getAllCategories, createProduct, updateProduct, deleteProduct, toggleProductActive } from '../../api/endpoints';
-import { Plus, Edit2, Trash2, Eye, EyeOff, Image as ImageIcon } from 'lucide-react';
+import { getAdminAllProducts, getAdminAllCategories, createProduct, updateProduct, deleteProduct, toggleProductActive } from '../../api/endpoints';
+import { Plus, Edit2, Trash2, Eye, EyeOff, Image as ImageIcon, Search } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Spinner from '../../components/Spinner';
 
@@ -15,6 +15,7 @@ const AdminProducts = () => {
   const [editingId, setEditingId] = useState(null);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const emptyForm = {
     name: '',
@@ -36,7 +37,7 @@ const AdminProducts = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await getAllCategories();
+      const response = await getAdminAllCategories();
       setCategories(response.data);
     } catch (error) {
       toast.error('Failed to load categories');
@@ -46,15 +47,18 @@ const AdminProducts = () => {
   const fetchProducts = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await getAdminAllProducts(page, 10);
+      const isSearchMode = Boolean(searchTerm.trim());
+      const requestPage = isSearchMode ? 0 : page;
+      const requestSize = isSearchMode ? 300 : 10;
+      const response = await getAdminAllProducts(requestPage, requestSize);
       setProducts(response.data.content);
-      setTotalPages(response.data.totalPages);
+      setTotalPages(isSearchMode ? 1 : response.data.totalPages);
     } catch (error) {
       toast.error('Failed to load products');
     } finally {
       setLoading(false);
     }
-  }, [page]);
+  }, [page, searchTerm]);
 
   useEffect(() => {
     fetchProducts();
@@ -102,7 +106,19 @@ const AdminProducts = () => {
       fetchProducts();
     } catch (error) {
       console.error('Save error:', error.response?.data || error);
-      toast.error(error.response?.data?.message || 'Failed to save product');
+      const status = error.response?.status;
+      const backendMessage = error.response?.data?.message;
+      const fieldErrors = error.response?.data?.errors;
+      const fieldErrorText = fieldErrors
+        ? Object.values(fieldErrors).filter(Boolean).join(', ')
+        : '';
+      const message =
+        backendMessage ||
+        fieldErrorText ||
+        (status === 403
+          ? 'You do not have permission to create or edit products. Please login with an admin account.'
+          : 'Failed to save product');
+      toast.error(message);
     } finally {
       setSaving(false);
     }
@@ -153,18 +169,39 @@ const AdminProducts = () => {
     setShowForm(false);
   };
 
+  const filteredProducts = products.filter((product) => {
+    const q = searchTerm.trim().toLowerCase();
+    if (!q) return true;
+    return (
+      String(product.name || '').toLowerCase().includes(q) ||
+      String(product.description || '').toLowerCase().includes(q) ||
+      String(product.categoryName || '').toLowerCase().includes(q)
+    );
+  });
+
   if (loading && products.length === 0) return <Spinner />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Manage Products</h1>
+        <h1 className="mandova-similar text-3xl font-bold text-gray-900">Manage Products</h1>
         <button
           onClick={() => !showForm ? setShowForm(true) : resetForm()}
           className="flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-lg hover:bg-green-700 transition font-semibold"
         >
           <Plus size={20} /> {showForm ? 'Cancel' : 'Add Product'}
         </button>
+      </div>
+
+      <div className="relative mb-6 max-w-xl">
+        <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search products by name, category, or description"
+          className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+        />
       </div>
 
       {/* Add/Edit Form */}
@@ -376,7 +413,7 @@ const AdminProducts = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {products.map(product => (
+                    {filteredProducts.map(product => (
                       <tr key={product.id} className="border-b hover:bg-gray-50 transition">
                         {/* Image */}
                         <td className="px-4 py-3">
@@ -439,7 +476,7 @@ const AdminProducts = () => {
               </div>
 
               {/* Pagination */}
-              {totalPages > 1 && (
+              {totalPages > 1 && !searchTerm.trim() && (
                 <div className="flex justify-center items-center gap-2 p-6 border-t">
                   <button
                     onClick={() => setPage(Math.max(0, page - 1))}
@@ -456,6 +493,12 @@ const AdminProducts = () => {
                   >
                     Next
                   </button>
+                </div>
+              )}
+
+              {searchTerm.trim() && (
+                <div className="px-6 py-4 border-t text-sm text-gray-500 text-center">
+                  Showing {filteredProducts.length} result(s) for "{searchTerm.trim()}"
                 </div>
               )}
             </>

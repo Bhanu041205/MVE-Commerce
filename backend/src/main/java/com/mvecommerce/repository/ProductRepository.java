@@ -23,4 +23,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByStockLessThan(Integer stock);
 
     Page<Product> findAll(Pageable pageable);
+
+    boolean existsByNameAndCategoryId(String name, Long categoryId);
 }

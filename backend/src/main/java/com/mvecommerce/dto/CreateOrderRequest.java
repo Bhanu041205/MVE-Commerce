@@ -14,6 +14,10 @@ public class CreateOrderRequest {
     private Long shippingAddressId;
     private List<OrderItemData> items;
     private String notes;
+    private String paymentMethod;
+    private String paymentDetails;
+    private String transportMode;
+    private String transportDetails;
 
     @Data
     @NoArgsConstructor

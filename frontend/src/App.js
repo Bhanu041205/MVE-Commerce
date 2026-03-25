@@ -18,12 +18,17 @@ import Checkout from './pages/customer/Checkout';
 import Orders from './pages/customer/Orders';
 import OrderDetail from './pages/customer/OrderDetail';
 import Profile from './pages/customer/Profile';
+import DeliveryPortal from './pages/customer/DeliveryPortal';
+import SupportChat from './pages/customer/SupportChat';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/Dashboard';
 import AdminProducts from './pages/admin/Products';
 import AdminCategories from './pages/admin/Categories';
 import AdminOrders from './pages/admin/Orders';
+import AdminDeliveryPortal from './pages/admin/DeliveryPortal';
+import AdminDeliveryList from './pages/admin/DeliveryList';
+import AdminSupportChat from './pages/admin/SupportChat';
 
 // Auth Pages
 import Login from './pages/auth/Login';
@@ -92,7 +97,7 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen flex flex-col bg-white">
+      <div className="min-h-screen flex flex-col bg-[#d8d5cf]">
         {user && <Navbar />}
         
         <main className="flex-grow">
@@ -149,6 +154,22 @@ function App() {
                 </PrivateRoute>
               }
             />
+            <Route
+              path="/delivery-portal"
+              element={
+                <PrivateRoute requiredRole="CUSTOMER">
+                  <DeliveryPortal />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/support-chat"
+              element={
+                <PrivateRoute requiredRole="CUSTOMER">
+                  <SupportChat />
+                </PrivateRoute>
+              }
+            />
 
             {/* Admin Routes */}
             <Route
@@ -180,6 +201,30 @@ function App() {
               element={
                 <PrivateRoute requiredRole="ADMIN">
                   <AdminOrders />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/delivery"
+              element={
+                <PrivateRoute requiredRole="ADMIN">
+                  <AdminDeliveryPortal />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/delivery-list"
+              element={
+                <PrivateRoute requiredRole="ADMIN">
+                  <AdminDeliveryList />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/support-chat"
+              element={
+                <PrivateRoute requiredRole="ADMIN">
+                  <AdminSupportChat />
                 </PrivateRoute>
               }
             />
