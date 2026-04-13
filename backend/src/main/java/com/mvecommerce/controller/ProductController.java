@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 @AllArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001", "http://localhost:5173", "http://localhost:5174"})
 public class ProductController {
 
     private final ProductService productService;
@@ -25,9 +25,12 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<Page<ProductDTO>> getAllProducts(
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "10") Integer size) {
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(required = false) Boolean inStock,
+            @RequestParam(required = false) Double minRating,
+            @RequestParam(required = false) String sortBy) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<ProductDTO> products = productService.getAllProducts(pageable);
+        Page<ProductDTO> products = productService.getAllProducts(pageable, inStock, minRating, sortBy);
         return ResponseEntity.ok(products);
     }
 

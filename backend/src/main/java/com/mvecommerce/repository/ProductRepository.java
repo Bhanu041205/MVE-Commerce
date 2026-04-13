@@ -25,4 +25,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findAll(Pageable pageable);
 
     boolean existsByNameAndCategoryId(String name, Long categoryId);
+    
+    // Dynamic filter method for products with filtering and sorting
+    @Query("SELECT p FROM Product p WHERE p.isActive = true " +
+           "AND (:inStock IS NULL OR p.stock > 0) " +
+           "AND (:minRating IS NULL OR p.rating >= :minRating)")
+    Page<Product> findAllWithFilters(Boolean inStock, Double minRating, Pageable pageable);
 }

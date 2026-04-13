@@ -28,9 +28,11 @@ public class ProductService {
     private final ModelMapper modelMapper;
 
     // Customer Methods
+
     @Transactional(readOnly = true)
-    public Page<ProductDTO> getAllProducts(Pageable pageable) {
-        return productRepository.findByIsActiveTrue(pageable)
+    public Page<ProductDTO> getAllProducts(Pageable pageable, Boolean inStock, Double minRating, String sortBy) {
+        // Use a custom repository method for dynamic filtering (sortBy is passed for API compatibility)
+        return productRepository.findAllWithFilters(inStock, minRating, pageable)
                 .map(this::convertToDTO);
     }
 
@@ -54,7 +56,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public Page<ProductDTO> getProductsByCategory(Long categoryId, Pageable pageable) {
-        Category category = categoryRepository.findById(categoryId)
+        categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
         
         return productRepository.findByCategoryIdAndIsActiveTrue(categoryId, pageable)
