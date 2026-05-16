@@ -2,10 +2,10 @@ spring:
   application:
     name: mvecommerce-backend
   datasource:
-    url: jdbc:postgresql://ep-flat-unit-ai50sjq8-pooler.c-4.us-east-1.aws.neon.tech:5432/neondb?sslmode=require
-    username: neondb_owner
-    password: npg_HzrORgZGC5U4
-    driver-class-name: org.postgresql.Driver
+    url: ${DATABASE_URL:jdbc:postgresql://ep-flat-unit-ai50sjq8-pooler.c-4.us-east-1.aws.neon.tech:5432/neondb?sslmode=require}
+    username: ${DB_USERNAME:neondb_owner}
+    password: ${DB_PASSWORD:npg_HzrORgZGC5U4}
+    driver-class-name: ${DB_DRIVER:org.postgresql.Driver}
     hikari:
       maximum-pool-size: 5
       minimum-idle: 1
@@ -16,8 +16,8 @@ spring:
       validation-timeout: 5000
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: false
+      ddl-auto: ${JPA_HIBERNATE_DDL_AUTO:update}
+    show-sql: ${JPA_SHOW_SQL:false}
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -27,38 +27,38 @@ spring:
       write-dates-as-timestamps: false
 
 server:
-  port: 6969
+  port: ${PORT:6969}
   servlet:
-    context-path: /api
+    context-path: ${SERVER_SERVLET_CONTEXT_PATH:/api}
   error:
-    include-message: always
-    include-binding-errors: always
+    include-message: ${SERVER_ERROR_INCLUDE_MESSAGE:always}
+    include-binding-errors: ${SERVER_ERROR_INCLUDE_BINDING_ERRORS:always}
 
 # JWT Configuration
 jwt:
-  secret: mvecommerce_jwt_secret_key_for_authentication_and_token_generation_purposes_2026
-  expiration: 86400000
-  refresh-expiration: 604800000
+  secret: ${JWT_SECRET:mvecommerce_jwt_secret_key_for_authentication_and_token_generation_purposes_2026}
+  expiration: ${JWT_EXPIRATION:86400000}
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
 
 # Logging Configuration
 logging:
   level:
-    root: INFO
-    com.mvecommerce: DEBUG
+    root: ${LOGGING_LEVEL_ROOT:INFO}
+    com.mvecommerce: ${LOGGING_LEVEL_COM_MVECOMMERCE:DEBUG}
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
 
-# CORS Configuration
+# CORS Configuration (comma-separated; must include your deployed frontend origin)
 cors:
-  allowed-origins: http://localhost:3000,http://localhost:3001
-  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
-  allowed-headers: "*"
-  allow-credentials: true
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:5174,http://localhost:3000,http://localhost:3001}
+  allowed-methods: ${CORS_ALLOWED_METHODS:GET,POST,PUT,DELETE,OPTIONS}
+  allowed-headers: ${CORS_ALLOWED_HEADERS:*}
+  allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
 
 # Optional notification config for customer order notes.
 app:
   order-notes:
     # Comma-separated emails for admin/seller recipients.
-    notify-recipients: ""
+    notify-recipients: ${APP_ORDER_NOTES_NOTIFY_RECIPIENTS:}
     # Sender used by notification emails.
-    from-email: no-reply@mvecommerce.local
+    from-email: ${APP_ORDER_NOTES_FROM_EMAIL:no-reply@mvecommerce.local}
