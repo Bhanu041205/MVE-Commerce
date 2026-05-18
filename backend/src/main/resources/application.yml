@@ -2,9 +2,10 @@ spring:
   application:
     name: mvecommerce-backend
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://ep-flat-unit-ai50sjq8-pooler.c-4.us-east-1.aws.neon.tech:5432/neondb?sslmode=require}
-    username: ${DB_USERNAME:neondb_owner}
-    password: ${DB_PASSWORD:npg_HzrORgZGC5U4}
+    # Local default; on Render set DATABASE_URL (postgresql:// or jdbc:postgresql://)
+    url: jdbc:postgresql://localhost:5432/mvecommerce
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
     driver-class-name: ${DB_DRIVER:org.postgresql.Driver}
     hikari:
       maximum-pool-size: 5

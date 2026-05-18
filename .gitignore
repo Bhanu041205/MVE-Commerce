@@ -6,18 +6,22 @@
 *~
 .DS_Store
 
-# Backend
+# Backend (Java / Spring Boot)
 backend/target/
+backend/bin/
 backend/.classpath
 backend/.project
 backend/.settings/
-backend/bin/
-backend/*.jar
-backend/*.war
 backend/logs/
+*.jar
+*.war
 
-# Frontend
+# Node (never commit dependencies)
+node_modules/
+
+# Frontend (React / Vite)
 frontend/node_modules/
+frontend/dist/
 frontend/build/
 frontend/.env.local
 frontend/.env.*.local
@@ -25,25 +29,22 @@ frontend/npm-debug.log*
 frontend/yarn-debug.log*
 frontend/yarn-error.log*
 
+# Environment files
+.env
+.env.local
+.env.*.local
+
 # Database
 *.sql
 *.sqlite
 *.db
 
-# Dependencies
-*.lock
+# Logs
 *.log
 
-# OS
+# OS files
 Thumbs.db
-.DS_Store
 
 # Temporary files
 *.tmp
 *.temp
-*~
-
-# Environment files
-.env
-.env.local
-.env.*.local

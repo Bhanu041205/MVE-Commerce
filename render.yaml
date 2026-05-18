@@ -1,0 +1,87 @@
+services:
+  - type: web
+    name: mvecommerce-backend
+    env: docker
+    region: oregon
+    plan: starter
+    
+    # Git repository configuration
+    rootDir: backend
+    repo: https://github.com/Bhanu041205/MVE-Commerce
+    dockerfilePath: ./Dockerfile
+    buildCommand: ""  # Uses Dockerfile
+    startCommand: ""  # Uses Dockerfile ENTRYPOINT
+    
+    # Environment Variables for Backend
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRATION
+        value: "86400000"
+      - key: JWT_REFRESH_EXPIRATION
+        value: "604800000"
+      - key: PORT
+        value: "6969"
+      - key: SERVER_SERVLET_CONTEXT_PATH
+        value: "/api"
+      - key: SERVER_ERROR_INCLUDE_MESSAGE
+        value: "true"
+      - key: SERVER_ERROR_INCLUDE_BINDING_ERRORS
+        value: "true"
+      - key: LOGGING_LEVEL_ROOT
+        value: "INFO"
+      - key: LOGGING_LEVEL_COM_MVECOMMERCE
+        value: "DEBUG"
+      - key: CORS_ALLOWED_ORIGINS
+        value: "https://mandova-frontend.onrender.com,http://localhost:5173"
+      - key: CORS_ALLOWED_METHODS
+        value: "GET,POST,PUT,DELETE,OPTIONS"
+      - key: CORS_ALLOWED_HEADERS
+        value: "*"
+      - key: CORS_ALLOW_CREDENTIALS
+        value: "true"
+      - key: JPA_HIBERNATE_DDL_AUTO
+        value: "update"
+      - key: JPA_SHOW_SQL
+        value: "false"
+      - key: JPA_HIBERNATE_FORMAT_SQL
+        value: "true"
+      - key: APP_ORDER_NOTES_NOTIFY_RECIPIENTS
+        value: "your-email@example.com"
+      - key: APP_ORDER_NOTES_FROM_EMAIL
+        value: "no-reply@mvecommerce.local"
+    
+    # Health check
+    healthCheckPath: /api
+    healthCheckType: http
+
+  - type: static
+    name: mvecommerce-frontend
+    region: oregon
+    plan: free
+    rootDir: frontend
+    repo: https://github.com/Bhanu041205/MVE-Commerce
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    
+    # Environment Variables for Frontend
+    envVars:
+      - key: VITE_API_URL
+        value: "https://mandova-backend.onrender.com/api"
+      - key: VITE_GOOGLE_CLIENT_ID
+        sync: false
+      - key: VITE_GITHUB_CLIENT_ID
+        sync: false
+
+databases:
+  - name: mvecommerce-db
+    ipAllowList: []
+    plan: starter
+    region: oregon
+    postgresVersion: 15
