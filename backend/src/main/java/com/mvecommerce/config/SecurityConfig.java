@@ -40,7 +40,7 @@ public class SecurityConfig {
     @Value("${cors.allowed-origins}")
     private String corsAllowedOrigins;
 
-    @Value("${cors.allowed-origin-patterns}")
+    @Value("${cors.allowed-origin-patterns:https://*.onrender.com}")
     private String corsAllowedOriginPatterns;
 
     @Bean
@@ -83,9 +83,10 @@ public class SecurityConfig {
         List<String> origins = splitCsv(corsAllowedOrigins);
         List<String> originPatterns = splitCsv(corsAllowedOriginPatterns);
 
-        if (!originPatterns.isEmpty()) {
-            configuration.setAllowedOriginPatterns(originPatterns);
+        if (originPatterns.isEmpty()) {
+            originPatterns = List.of("https://*.onrender.com");
         }
+        configuration.setAllowedOriginPatterns(originPatterns);
         if (!origins.isEmpty()) {
             configuration.setAllowedOrigins(origins);
         }
