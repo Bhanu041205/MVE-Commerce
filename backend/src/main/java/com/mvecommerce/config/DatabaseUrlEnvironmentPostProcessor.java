@@ -24,9 +24,13 @@ public class DatabaseUrlEnvironmentPostProcessor implements EnvironmentPostProce
 
         Map<String, Object> properties = new HashMap<>();
         String jdbcUrl = DatabaseUrlNormalizer.toJdbcUrl(databaseUrl.trim());
-        properties.put("spring.datasource.url", jdbcUrl);
-
-        DatabaseUrlNormalizer.parseCredentials(jdbcUrl).ifPresent(credentials -> {
+        
+        // Clean the JDBC URL (removes channel_binding and other problematic params)
+        String cleanUrl = DatabaseUrlNormalizer.cleanJdbcUrl(jdbcUrl);
+        properties.put("spring.datasource.url", cleanUrl);
+        
+        // Try to extract credentials if embedded in URL (for compatibility)
+        DatabaseUrlNormalizer.parseCredentials(cleanUrl).ifPresent(credentials -> {
             properties.put("spring.datasource.username", credentials.username());
             properties.put("spring.datasource.password", credentials.password());
         });

@@ -16,6 +16,9 @@ services:
     envVars:
       - key: DATABASE_URL
         sync: false
+        # IMPORTANT: Set this manually in Render dashboard to your Neon database connection string
+        # Example: postgresql://user:password@host/database?sslmode=require
+        # Do NOT include passwords in git - set via Render dashboard only
       - key: DB_USERNAME
         sync: false
       - key: DB_PASSWORD
@@ -42,8 +45,6 @@ services:
         value: "https://mandova-frontend.onrender.com,http://localhost:5173"
       - key: CORS_ALLOWED_METHODS
         value: "GET,POST,PUT,DELETE,OPTIONS"
-      - key: CORS_ALLOWED_HEADERS
-        value: "*"
       - key: CORS_ALLOW_CREDENTIALS
         value: "true"
       - key: JPA_HIBERNATE_DDL_AUTO

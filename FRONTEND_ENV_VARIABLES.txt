@@ -1,0 +1,3 @@
+# FRONTEND Environment Variables - Copy Paste Ready
+
+VITE_API_URL=https://your-backend-name.onrender.com/api

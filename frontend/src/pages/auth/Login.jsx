@@ -9,7 +9,7 @@ import { isAdminUser, isCustomerUser } from '../../utils/roleUtils';
 import toast from 'react-hot-toast';
 import Spinner from '../../components/Spinner';
 import { handleGoogleLogin } from '../../utils/oauthService';
-import { saveCredentials, searchCredentials, clearCredentials } from '../../utils/credentialManager';
+import { saveCredentials, searchCredentials, clearCredentials, getAllSavedCredentials, getSavedCredentials } from '../../utils/credentialManager';
 import Register from './Register';
 
 const Login = () => {
@@ -18,32 +18,31 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-    // Auto-fill credentials on mount if saved
-    useEffect(() => {
-      // Dynamically import to avoid circular dependency issues
-      import('../../utils/credentialManager').then(({ getSavedCredentials, hasCredentialsSaved }) => {
-        if (hasCredentialsSaved()) {
-          const creds = getSavedCredentials();
-          if (creds && creds.email && creds.password) {
-            // If password is 'google-oauth', don't autofill password, prompt Google login instead
-            if (creds.password === 'google-oauth') {
-              setFormData({ email: creds.email, password: '' });
-              setRememberMe(true);
-              setShowPassword(false);
-              toast('This account uses Google Sign-In. Please use "Continue with Google".', { icon: '🔒' });
-            } else {
-              setFormData({ email: creds.email, password: creds.password });
-              setRememberMe(true);
-              setShowPassword(true);
-            }
-          }
-        }
-      });
-    }, []);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [hasAutoFilled] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  // Auto-fill credentials on mount if saved
+  useEffect(() => {
+    import('../../utils/credentialManager').then(({ getSavedCredentials, hasCredentialsSaved }) => {
+      if (hasCredentialsSaved()) {
+        const creds = getSavedCredentials();
+        if (creds && creds.email && creds.password) {
+          // If password is 'google-oauth', don't autofill password, prompt Google login instead
+          if (creds.password === 'google-oauth') {
+            setFormData({ email: creds.email, password: '' });
+            setRememberMe(true);
+            setShowPassword(false);
+            toast('This account uses Google Sign-In. Please use "Continue with Google".', { icon: '🔒' });
+          } else {
+            setFormData({ email: creds.email, password: creds.password });
+            setRememberMe(true);
+            setShowPassword(true);
+          }
+        }
+      }
+    });
+  }, []);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user: authUser } = useSelector((state) => state.auth);
@@ -73,7 +72,7 @@ const Login = () => {
     if (name === 'email') {
       const matches = searchCredentials(value);
       setSuggestions(matches);
-      setShowSuggestions(matches.length > 0);
+      setShowSuggestions(matches.length > 0 && value.trim() !== '');
 
       // Try to autofill password if exact email match exists
       const exactMatch = matches.find(c => c.email.toLowerCase() === value.toLowerCase());
@@ -103,10 +102,15 @@ const Login = () => {
   };
 
   const handleEmailFocus = () => {
-    // If credentials were auto-filled and password is not yet shown, show it on email click
-    if (hasAutoFilled && formData.password) {
+    // Show password if already filled from saved credentials
+    if (formData.password) {
       setShowPassword(true);
-      toast.success('Password revealed! ✨');
+    }
+    // Show all saved suggestions when email field is focused and empty
+    if (formData.email.trim() === '') {
+      const allSuggestions = searchCredentials('');
+      setSuggestions(allSuggestions);
+      setShowSuggestions(allSuggestions.length > 0);
     }
   };
 

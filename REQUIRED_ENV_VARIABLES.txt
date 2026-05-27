@@ -1,0 +1,12 @@
+# REQUIRED ENVIRONMENT VARIABLES ONLY
+
+## BACKEND (Render Web Service)
+
+DATABASE_URL=postgresql://neondb_owner:npg_HzrORgZGC5U4@ep-flat-unit-ai50sjq8-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+JWT_SECRET=mvecommerce_jwt_secret_key_for_authentication_and_token_generation_purposes_2026
+CORS_ALLOWED_ORIGINS=https://your-frontend-name.onrender.com
+
+
+## FRONTEND (Render Static Site)
+
+VITE_API_URL=https://your-backend-name.onrender.com/api

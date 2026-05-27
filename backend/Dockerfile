@@ -23,8 +23,9 @@ WORKDIR /app
 # Copy the jar file from build stage
 COPY --from=build /app/target/*.jar app.jar
 
-# Expose port 8080
-EXPOSE 8080
+# Note: Render sets PORT environment variable dynamically
+# Application reads ${PORT} from application.yml
+# No need to hardcode EXPOSE
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -81,11 +81,16 @@ export function getSavedCredentials(email) {
 // Search for credentials by email (autocomplete)
 export function searchCredentials(searchTerm) {
   try {
+    const credentialsList = getAllSavedCredentials();
+    
+    // If no search term or empty, return all credentials
     if (!searchTerm || searchTerm.trim() === '') {
-      return [];
+      return credentialsList.map(c => ({
+        email: c.email,
+        password: decryptValue(c.password)
+      }));
     }
 
-    const credentialsList = getAllSavedCredentials();
     const lowerSearchTerm = searchTerm.toLowerCase();
 
     // Return all emails that match the search term

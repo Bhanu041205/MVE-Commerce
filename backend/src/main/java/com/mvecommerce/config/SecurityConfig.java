@@ -91,7 +91,19 @@ public class SecurityConfig {
             configuration.setAllowedOrigins(origins);
         }
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        // Note: Cannot use "*" for allowed headers when credentials are enabled.
+        // Must specify explicit headers required by the frontend
+        configuration.setAllowedHeaders(Arrays.asList(
+                "Content-Type",
+                "Authorization",
+                "Accept",
+                "Origin",
+                "Access-Control-Request-Method",
+                "Access-Control-Request-Headers",
+                "X-Requested-With",
+                "Cache-Control",
+                "X-CSRF-Token"
+        ));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 

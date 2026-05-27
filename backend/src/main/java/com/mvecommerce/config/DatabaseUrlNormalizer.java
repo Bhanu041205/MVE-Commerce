@@ -22,9 +22,13 @@ public final class DatabaseUrlNormalizer {
         }
 
         String jdbcUrl = toJdbcUrl(databaseUrl.trim());
-        System.setProperty("spring.datasource.url", jdbcUrl);
-
-        parseCredentials(jdbcUrl).ifPresent(credentials -> {
+        
+        // Clean the JDBC URL (removes channel_binding and other problematic params)
+        String cleanUrl = cleanJdbcUrl(jdbcUrl);
+        System.setProperty("spring.datasource.url", cleanUrl);
+        
+        // Try to extract credentials if embedded in URL (for compatibility)
+        parseCredentials(cleanUrl).ifPresent(credentials -> {
             System.setProperty("spring.datasource.username", credentials.username());
             System.setProperty("spring.datasource.password", credentials.password());
         });
@@ -43,6 +47,30 @@ public final class DatabaseUrlNormalizer {
             return "jdbc:postgresql://" + url.substring("postgres://".length());
         }
         return url;
+    }
+
+    /**
+     * Strips credentials and problematic parameters from JDBC URL.
+     * Credentials should be set separately via username/password properties.
+     */
+    public static String cleanJdbcUrl(String jdbcUrl) {
+        try {
+            if (!jdbcUrl.startsWith("jdbc:postgresql://")) {
+                return jdbcUrl;
+            }
+
+            // Remove channel_binding parameter which causes driver issues
+            String cleaned = jdbcUrl.replaceAll("\\&?channel_binding=[^\\&]*", "");
+            
+            // Clean up any dangling ? or &
+            cleaned = cleaned.replaceAll("\\?\\s*$", "");
+            cleaned = cleaned.replaceAll("\\&\\s*$", "");
+            
+            return cleaned;
+        } catch (Exception e) {
+            // If anything fails, return original URL
+            return jdbcUrl;
+        }
     }
 
     static Optional<Credentials> parseCredentials(String jdbcUrl) {

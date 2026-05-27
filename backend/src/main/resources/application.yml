@@ -21,7 +21,8 @@ spring:
     show-sql: ${JPA_SHOW_SQL:false}
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        # Let Hibernate auto-detect dialect - removes HHH90000025 warning
+        # dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
   jackson:
     serialization:
