@@ -3,9 +3,9 @@ spring:
     name: mvecommerce-backend
   datasource:
     # Overridden at startup when DATABASE_URL is set (DatabaseUrlNormalizer)
-    url: jdbc:postgresql://ep-flat-unit-ai50sjq8-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require
-    username: ${DB_USERNAME:neondb_owner}
-    password: ${DB_PASSWORD:npg_HzrORgZGC5U4}
+    url: jdbc:postgresql://localhost:5432/mvecommerce
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
     driver-class-name: ${DB_DRIVER:org.postgresql.Driver}
     hikari:
       maximum-pool-size: 5
@@ -50,13 +50,13 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
 
-# CORS Configuration (Allow requests from any source)
+# CORS Configuration (comma-separated; must include your deployed frontend origin)
 cors:
-  allowed-origins: ${CORS_ALLOWED_ORIGINS:*}
-  allowed-origin-patterns: "${CORS_ALLOWED_ORIGIN_PATTERNS:*}"
-  allowed-methods: ${CORS_ALLOWED_METHODS:GET,POST,PUT,DELETE,OPTIONS,PATCH,HEAD}
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:5174,http://localhost:3000,http://localhost:3001}
+  allowed-origin-patterns: "${CORS_ALLOWED_ORIGIN_PATTERNS:https://*.onrender.com}"
+  allowed-methods: ${CORS_ALLOWED_METHODS:GET,POST,PUT,DELETE,OPTIONS}
   allowed-headers: "${CORS_ALLOWED_HEADERS:*}"
-  allow-credentials: ${CORS_ALLOW_CREDENTIALS:false}
+  allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
 
 # Optional notification config for customer order notes.
 app:
