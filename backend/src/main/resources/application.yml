@@ -2,12 +2,12 @@ spring:
   application:
     name: mvecommerce-backend
   datasource:
-    # For Render deployment: DATABASE_URL will override this
+    # For Render deployment: SPRING_DATASOURCE_URL should be set with full jdbc: prefix
     # For local development: uses localhost
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/mvecommerce}
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres}
-    driver-class-name: ${DB_DRIVER:org.postgresql.Driver}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/mvecommerce}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:org.postgresql.Driver}
     hikari:
       maximum-pool-size: 5
       minimum-idle: 1
@@ -22,8 +22,7 @@ spring:
     show-sql: ${JPA_SHOW_SQL:false}
     properties:
       hibernate:
-        # Let Hibernate auto-detect dialect - removes HHH90000025 warning
-        # dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
   jackson:
     serialization:
