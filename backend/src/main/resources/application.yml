@@ -2,8 +2,9 @@ spring:
   application:
     name: mvecommerce-backend
   datasource:
-    # Overridden at startup when DATABASE_URL is set (DatabaseUrlNormalizer)
-    url: jdbc:postgresql://localhost:5432/mvecommerce
+    # For Render deployment: DATABASE_URL will override this
+    # For local development: uses localhost
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/mvecommerce}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
     driver-class-name: ${DB_DRIVER:org.postgresql.Driver}
